@@ -2,20 +2,30 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * @property integer $id
+ * @property string $email
+ * @property string $password
+ * @property string $ultima_conexion
+ * @property string $updated_at
+ * @property string $created_at
+ * @property string $remember_token
+ * @property Usuario[] $usuarios
+ */
 class User extends Authenticatable
 {
     use Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'ultima_conexion'
     ];
 
     /**
@@ -26,4 +36,19 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function usuarios()
+    {
+        return $this->hasMany('App\Usuario', 'id_user');
+    }
+
+    public function updateLastConnection(){
+        //dd($this);
+        $this->ultima_conexion = Carbon::now();
+        $this->save();
+    }
 }
+
