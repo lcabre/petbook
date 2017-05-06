@@ -15,7 +15,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $updated_at
  * @property string $created_at
  * @property string $remember_token
- * @property Usuario[] $usuarios
+ * @property Usuario[] $usuario
  */
 class User extends Authenticatable
 {
@@ -40,7 +40,7 @@ class User extends Authenticatable
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function usuarios()
+    public function usuario()
     {
         return $this->hasMany('App\Usuario', 'id_user');
     }

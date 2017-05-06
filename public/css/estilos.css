@@ -1,0 +1,238 @@
+@font-face {
+    font-family: 'Bebas-Neue-Light';
+    src:  url('/fonts/Bebas-Neue-Light.ttf.woff') format('woff'),
+    url('/fonts/Bebas-Neue-Light.ttf.svg#Bebas-Neue-Light') format('svg'),
+    url('/fonts/fonts/Bebas-Neue-Light.ttf.eot'),
+    url('/fonts/Bebas-Neue-Light.eot?#iefix') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Bebas-Neue';
+    src:  url('/fonts/Bebas-Neue.ttf.woff') format('woff'),
+    url('/fonts/Bebas-Neue.ttf.svg#Bebas-Neue') format('svg'),
+    url('/fonts/Bebas-Neue.ttf.eot'),
+    url('/fonts/Bebas-Neue.eot?#iefix') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+body{
+    background-color: #EEF1F2!important;
+    color: #b3b3b3!important;
+}
+aside, section{
+    padding: 0!important;
+}
+header{
+    height:50px;
+    background-color: #FFFFFF;
+    display: table!important;
+    width: 100%;
+}
+header .logo{
+    float: left;
+    padding-left: 3px;
+    margin-top: 13px;
+}
+header .noificaciones{
+    float: left;
+    text-transform: uppercase;
+    padding-left: 10px;
+    margin-top: 15px;
+}
+header .container{
+    position: relative;
+}
+header .user {
+    z-index: 99;
+    padding: 10px;
+    background-color: #F5F5F5;
+    float: right;
+    position: relative;
+    margin-top: 4px;
+}
+
+header .userpanel{
+    display: none;
+    background-color: #F5F5F5;
+    width: 100%;
+    padding: 10px 10px 10px 10px;
+    position: absolute;
+    left: 0;
+}
+.rounded-border{
+    border-radius: 3px;
+}
+.padding{
+    padding-top: 7px!important;
+    padding-bottom: 7px!important;
+}
+.padding-l{
+    padding-top: 7px!important;
+    padding-bottom: 7px!important;
+    padding-left: 7px!important;
+}
+.padding-r{
+    padding-top: 7px!important;
+    padding-bottom: 7px!important;
+    padding-right: 7px!important;
+}
+
+.publicaciones, .perfil, .ranking{
+    background-color: #FFFFFF;
+}
+.perfil{
+    position: relative;
+    padding-bottom: 5px;
+}
+.perfil .imgperfil{
+    height: 100px;
+    background-color: #2a88bd;
+    border-radius: 3px 3px 0 0;
+}
+.perfil .avatar{
+    position: absolute;
+    left: 10px;
+    top: 60px;
+    height: 60px;
+    width: 60px;
+    background-color: #2ab27b;
+    border: 1px solid #ffffff;
+}
+.perfil .nombre{
+    left: 50px;
+    top: 60px;
+    font-weight: 600;
+    padding-left: 75px;
+    font-size: 16px;
+}
+.perfil .tittle{
+    text-transform: uppercase;
+    font-size: 13px;
+}
+.perfil .numeros{
+    display: inline-block;
+}
+
+.perfil .tittle .total{
+    color: #29ABE2;
+    font-size: 22px;
+    font-weight: 600;
+    margin-top: -8px;
+}
+.publicaciones .avatar{
+    height: 40px;
+    width: 40px;
+    background-color: #2ab27b;
+    border: 1px solid #ffffff;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    float: left;
+}
+.publicaciones h1, .login h1{
+    text-transform: uppercase;
+    font-size: 14px;
+    padding: 12px 14px 9px;
+    border-bottom: 2px solid #E6E6E6;
+    margin: 0;
+}
+.publicaciones .content{
+    padding: 12px;
+}
+.name{
+    font-size: 16px;
+    font-weight: 600;
+}
+.publicaciones .post{
+    display: inline-block;
+    border-top: 1px solid #E6E6E6;
+}
+.publicaciones .post:first-of-type{
+    border-top: none;
+}
+
+.publicaciones .post img{
+    max-width: 100%;
+}
+
+.box{
+    background-color: #FFFFFF;
+    padding: 12px 14px;
+    margin-bottom: 6px;
+}
+.box h1{
+    text-transform: uppercase;
+    font-size: 14px;
+    /*border-bottom: 2px solid #E6E6E6;*/
+    margin: 0;
+}
+.box .anuncio{
+    display: inline-block;
+    margin-top: 10px;
+}
+.box .content{
+    padding-left: 10px;
+}
+.box .content .tipo{
+    margin-top: -5px;
+}
+.box .avatar{
+    height: 40px;
+    width: 40px;
+    background-color: #2ab27b;
+    border: 1px solid #ffffff;
+    float: left;
+}
+.box .content{
+    display: inline-block;
+}
+.login {
+    background-color: #FFFFFF;
+    max-width: 500px;
+    margin: 0 auto;
+}
+.mainhome{
+    text-align: center;
+    margin-top: 85px;
+}
+.mainhome h2{
+    font-family: Bebas-Neue-Light ;
+    font-size: 65px;
+}
+.mainhome img{
+    margin: 0 auto;
+    width:100%;
+}
+.mainlogin{
+    text-align: center;
+    margin-top: 85px;
+}
+
+@media (max-width: 768px) {
+    .padding-r{
+        padding-right: 0!important;
+    }
+    .padding-l{
+        padding-left: 0!important;
+    }
+}
+
+@media (max-width: 550px) {
+    .mainhome h2 {
+        font-family: Bebas-Neue-Light;
+        font-size: 45px;
+    }
+}
+
+@media (max-width: 293px) {
+    header .user {
+        padding: 10px 10px 10px 0;
+        float: left;
+    }
+    .noificaciones{
+        width:100%;
+    }
+}
+
+
