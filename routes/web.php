@@ -17,7 +17,13 @@
 
 Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
-Route::get('/wall', 'WallController@index')->name('wall');
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/wall', 'WallController@index')->name('wall');
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
+Route::get('/perfil', 'UserController@index')->name('perfil');
+Route::get('/editdatos', 'UserController@editDatos')->name('editdatos');
+Route::post('/perfil/editdata', 'UserController@editData')->name('perfil/editdata');
+
+Route::get('/newpost', 'PostController@newpost')->name('newpost');
+
 Route::get('/test', 'TestController@index')->name('test');

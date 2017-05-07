@@ -11,6 +11,8 @@
     <link href="{{ asset('css/estilos.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap-datepicker.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-select.min.css">
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
@@ -27,13 +29,12 @@
                 </a>
             </div>
             <div class="noificaciones">
-                Notificaciones
+                Perfil
             </div>
             @if (Auth::check())
                 <div class="user rounded-border"> {{ Auth::user()->email }} <i class="fa fa-chevron-down" aria-hidden="true"></i>
                     <div class="userpanel">
-                        <div><a href="{{ route("perfil") }}">Perfil</a></div>
-                        <div><a href="{{ route("logout") }}">Salir</a></div>
+                        <a href="{{ route("logout") }}">Salir</a>
                     </div>
                 </div>
             @endif
@@ -43,30 +44,14 @@
         <aside class="col-lg-3 col-md-3 col-sm-3 col-xs-12 padding-r">
             @yield("perfil")
         </aside>
-        <section class="col-lg-6 col-md-6 col-sm-6 col-xs-12 padding">
+        <section class="col-lg-9 col-md-9 col-sm-9 col-xs-12 padding">
             @yield("content")
         </section>
-        <aside class="col-lg-3 col-md-3 col-sm-3 col-xs-12 padding-l">
-            @yield("anuncios")
-            @yield("ranking")
-        </aside>
     </div>
     <script src="{{ asset('js/app.js') }}"></script>
-    <script>
-        $(document).ready(function(){
-            $(".fa-chevron-down").click(function(){
-                console.log("dasasd");
-                if($(".userpanel").is(":visible"))
-                {
-                    $(this).removeClass('fa-chevron-up');
-                    $(this).addClass('fa-chevron-down');
-                }else{
-                    $(this).removeClass('fa-chevron-down');
-                    $(this).addClass('fa-chevron-up');
-                }
-                $(".userpanel").slideToggle("fast");
-            });
-        });
-    </script>
+    <script src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap-datepicker.es.js') }}"></script>
+    <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
+    @yield("javascript")
 </body>
 </html>

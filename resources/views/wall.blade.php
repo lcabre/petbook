@@ -30,7 +30,7 @@
         </div>
     </div>
 @endsection
-@section("publicaciones")
+@section("content")
     <div class="publicaciones rounded-border ">
         <h1>
             Publicaciones

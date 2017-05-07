@@ -78,7 +78,7 @@ header .userpanel{
     padding-right: 7px!important;
 }
 
-.publicaciones, .perfil, .ranking{
+.publicaciones, .perfil, .ranking, .generalbox{
     background-color: #FFFFFF;
 }
 .perfil{
@@ -130,14 +130,14 @@ header .userpanel{
     margin-right: 10px;
     float: left;
 }
-.publicaciones h1, .login h1{
+.publicaciones h1, .login h1, .generalbox h1{
     text-transform: uppercase;
     font-size: 14px;
     padding: 12px 14px 9px;
     border-bottom: 2px solid #E6E6E6;
     margin: 0;
 }
-.publicaciones .content{
+.publicaciones .content, .generalbox .content{
     padding: 12px;
 }
 .name{
@@ -154,6 +154,45 @@ header .userpanel{
 
 .publicaciones .post img{
     max-width: 100%;
+}
+
+.generalbox, .generalbox .content{
+    float: left;
+    width: 100%;
+}
+
+.generalbox button {
+    float: right;
+    margin-top: 10px;
+}
+.generalbox .dato{
+    width: 100%;
+    border-bottom: dashed 1px #ccc;
+}
+
+.generalbox .fila:last-child{
+    margin-bottom: 10px;
+}
+
+.generalbox:not(:first-child){
+    margin-top: 10px;
+}
+
+.edit, .cancel{
+    color: #3097d1;
+    text-decoration: none;
+    display: inline-block;
+    float: right;
+    cursor: pointer;
+}
+.cancel{
+    padding-right: 15px;
+}
+.editdato{
+    display: none;
+}
+.generalbox .fila:not(:first-child){
+    margin-top: 15px;
 }
 
 .box{
@@ -207,6 +246,14 @@ header .userpanel{
 .mainlogin{
     text-align: center;
     margin-top: 85px;
+}
+
+.btn-group.bootstrap-select{
+    width:100% !important;
+}
+.filaseparator {
+    border-bottom: 1px solid #CCC;
+    margin-top: 15px;
 }
 
 @media (max-width: 768px) {

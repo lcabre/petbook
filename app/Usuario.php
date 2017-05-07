@@ -34,6 +34,7 @@ class Usuario extends Model
      * @var array
      */
     protected $fillable = ['id_user', 'nombre', 'domicilio', 'telefono', 'geoposicion', 'sexo', 'fecha_nacimiento', 'updated_at', 'created_at'];
+    protected $dates = ['fecha_nacimiento'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

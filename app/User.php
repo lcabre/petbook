@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Validator;
 
 /**
  * @property integer $id
@@ -37,6 +38,10 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /*protected $validators = Validator::make(
+        ["email"] => ["required|email|unique:users"]
+    );*/
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -45,10 +50,22 @@ class User extends Authenticatable
         return $this->hasMany('App\Usuario', 'id_user');
     }
 
+    /**
+     *
+     */
     public function updateLastConnection(){
         //dd($this);
         $this->ultima_conexion = Carbon::now();
         $this->save();
+    }
+
+    /**
+     *
+     */
+    public function addPerfil($user){
+        $perfil = new Usuario();
+        $this->usuario()->save($perfil);
+        return $perfil;
     }
 }
 
