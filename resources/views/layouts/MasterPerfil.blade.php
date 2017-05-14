@@ -22,7 +22,7 @@
     <title>Document</title>
 </head>
 <body>
-    <header>
+    <header class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="logo">
                 <a href="{{ route("home") }}">
@@ -32,6 +32,7 @@
             @if (Auth::check())
                 <div class="user rounded-border"> {{ Auth::user()->email }} <i class="fa fa-chevron-down" aria-hidden="true"></i>
                     <div class="userpanel">
+                        <div><a href="{{ route("perfil") }}">Perfil</a></div>
                         <a href="{{ route("logout") }}">Salir</a>
                     </div>
                 </div>

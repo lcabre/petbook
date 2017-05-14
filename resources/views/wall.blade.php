@@ -3,13 +3,21 @@
 @section("perfil")
     <div class="perfil rounded-border ">
         <div class="imgperfil">
-
+            @if(isset($fotoPerfil))
+                <img src="{{$fotoPerfil->getUrl()}}" alt="">
+            @endif
         </div>
         <div class="avatar rounded-border">
-
+            @if(isset($avatar))
+                <img src="{{$avatar}}" alt="">
+            @else
+                <img src="/img/defaul_perfil_img.jpg" alt="">
+            @endif
         </div>
         <div class="nombre">
-            Bingo
+            @if(auth()->user()->getPerfil()->mascotas())
+                {{ auth()->user()->getPerfil()->mascotas()->first()->nombre }}
+            @endif
         </div>
         <div class="numeros">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -100,5 +108,24 @@
 
 
         qweqwe
+    </div>
+@endsection
+
+<?php /** @var App\Usuario $mascota */ ?>
+@section("menumascotas")
+    <div class="box rounded-border ">
+        <h1>Mis Mascotas</h1>
+        @if($mascotas->count())
+        <div class="lista">
+            <ul>
+                @foreach($mascotas as $mascota)
+                    <a href="#{{-- $mascota->id --}}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>{{ $mascota->nombre }}</li></a>
+                @endforeach
+            </ul>
+        </div>
+        @else
+            <div class="alert alert-warning">No posee mascotas</div>
+            Ingrese <a href="{{ route("agregarMascotas") }}">Aquí</a> para agregar una.
+        @endif
     </div>
 @endsection

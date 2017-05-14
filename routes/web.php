@@ -18,15 +18,19 @@
 Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/wall', 'WallController@index')->name('wall');
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
-Route::get('/perfil', 'PerfilController@index')->name('perfil');
-Route::get('/mascotas', 'MascotaController@index')->name('mascotas');
-Route::get('/mascotas/agregar', 'MascotaController@agregarMascotaView')->name('agregarMascotas');
+Route::get('/wall', 'ViewController@indexWall')->name('wall');
+Route::get('/perfil', 'ViewController@indexPerfil')->name('perfil');
+Route::get('/mascotas', 'ViewController@indexMascota')->name('mascotas');
+Route::get('/mascotas/agregar', 'ViewController@agregarMascota')->name('agregarMascotas');
+Route::get('/mascotas/edit/{id}', 'ViewController@editMascota')->name("view.editMascota");
 
 Route::post('/perfil/editdata', 'PerfilController@editData')->name('perfil/editdata');
 Route::post('/perfil/uploadperfilimage', 'PerfilController@uploadPerfilImage')->name('perfil/uploadperfilimage');
 Route::post('/mascotas/add', 'MascotaController@addMascota')->name("addMascota");
+Route::post('/mascotas/edit/', 'MascotaController@editMascota')->name("editMascota");
+Route::post('/mascotas/remove/', 'MascotaController@removeMascota')->name("removeMascota");
+Route::post('/mascotas/uploadperfilimage', 'MascotaController@uploadPerfilImage')->name('mascotas/uploadperfilimage');
 
 Route::get('/raza/{id}', 'RazaController@getById')->name("getRazaById");
 Route::get('/raza/tipo/{idTipo}', 'RazaController@getByTipo')->name("getRazaByTipo");

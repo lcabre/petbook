@@ -19,7 +19,7 @@
     <title>Document</title>
 </head>
 <body>
-<header>
+<header class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="logo">
             <a href="{{ route("home") }}"><img src="/img/logo.png" alt="PetBook, Red Social de Mascotas"></a>

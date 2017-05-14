@@ -19,6 +19,7 @@
 body{
     background-color: #EEF1F2!important;
     color: #b3b3b3!important;
+    padding-top: 50px;
 }
 aside, section{
     padding: 0!important;
@@ -40,6 +41,13 @@ header .notificaciones{
     padding-right: 10px;
     margin-top: 15px;
 }
+
+.btn-group{
+    float: right;
+    margin: 0!important;
+    padding: 0!important;
+}
+
 .notificaciones .badge{
     margin-top: -4px;
     background-color: #ED91A8;
@@ -132,12 +140,14 @@ header .userpanel{
     transform: translate(-50%,-50%);
     width: 100%;
 }
+.nombre{
+    font-weight: 600;
+    font-size: 16px;
+}
 .perfil .nombre{
     left: 50px;
     top: 60px;
-    font-weight: 600;
     padding-left: 75px;
-    font-size: 16px;
 }
 .perfil .tittle{
     text-transform: uppercase;
@@ -233,11 +243,16 @@ header .userpanel{
     padding: 12px 14px;
     margin-bottom: 6px;
 }
+.box .alert {
+    padding: 10px!important;
+    margin-bottom: 10px!important;
+}
 .box h1{
     text-transform: uppercase;
     font-size: 14px;
     /*border-bottom: 2px solid #E6E6E6;*/
     margin: 0;
+    padding-bottom: 10px;
 }
 .box ul{
     margin: 0;
@@ -336,6 +351,21 @@ box ul a{
 .fileinput form{
     display: none;
 }
+.mascota{
+    position: relative;
+    margin-bottom: 12px;
+}
+.mascota img{
+    width: 100%;
+}
+.mascota button{
+    position: absolute;
+    right: 15px;
+    bottom: 0;
+}
+.mascotas button {
+    margin-top: 0!important;
+}
 
 @media (max-width: 768px) {
     .padding-r{
@@ -360,6 +390,9 @@ box ul a{
     header .logo{
         width: 100%;
         margin-bottom: 5px;
+    }
+    header .logo img{
+        width: auto;
     }
     header .user {
         float: left;

@@ -20,36 +20,6 @@ class PerfilController extends Controller
     }
 
     /**
-     * Define your validation rules in a property in
-     * the controller to reuse the rules.
-     */
-    /*protected $validationRules=[
-        'email' => 'required|email|unique:users'
-        'sexo' => 'max:1',
-        "fecha_nacimiento" => 'date'
-    ];*/
-
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index(){
-        $user = Auth::user();
-        $variables = array();
-
-        $perfil = $user->getPerfil();
-        array_push($variables, "perfil");
-        if($fotoPerfil = $perfil->getFotoPerfil())
-            array_push($variables, "fotoPerfil");
-        return view('perfil', compact($variables));
-    }
-
-    public function editDatos(){
-        $user = Auth::user();
-        $perfil = $user->usuario()->first();
-        return view('editdatos', compact("perfil"));
-    }
-
-    /**
      * @param Request $request
      * @return string
      */

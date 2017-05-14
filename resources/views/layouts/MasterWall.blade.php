@@ -11,6 +11,9 @@
     <link href="{{ asset('css/estilos.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap-datepicker.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-select.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/jasny-bootstrap.min.css') }}">
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
@@ -19,7 +22,7 @@
     <title>Document</title>
 </head>
 <body>
-    <header>
+    <header class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="logo">
                 <a href="{{ route("home") }}">
@@ -44,6 +47,7 @@
     <div class="container">
         <aside class="col-lg-3 col-md-3 col-sm-3 col-xs-12 padding-r">
             @yield("perfil")
+            @yield("menumascotas")
         </aside>
         <section class="col-lg-6 col-md-6 col-sm-6 col-xs-12 padding">
             @yield("content")

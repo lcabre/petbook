@@ -16,7 +16,7 @@
             @endif
         </div>
         <div class="nombre">
-            Bingo
+            {{ auth()->user()->getPerfil()->nombre }}
         </div>
         <div class="numeros">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -45,14 +45,31 @@
             Mis Mascotas
         </h1>
         <div class="content">
-            @if(isset($mascotas))
+            @if(isset($mascotas) && $mascotas->count() )
+
                 @foreach($mascotas as $mascota)
-                    <article>
-                        <h2>{{ $mascota->nombre }}</h2>
-                        <div class="img"><img src="{{ $mascota->getFotoPerfil()->getUrl() }}" alt=""></div>
-                    </article>
+                    <div class="row mascota">
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                            @if( $mascota->getFotoPerfil())
+                                <img src="{{ $mascota->getFotoPerfil()->getUrl() }}" alt="">
+                            @else
+                                <img src="/img/defaul_perfil_img_mascota.jpg" alt="">
+                            @endif
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                            <div class="nombre">{{ $mascota->nombre }}</div>
+                            <div class="">{{ ($mascota->sexo == "H")?"Macho":"Hembra" }}</div>
+                            <div class="">{{ $mascota->edad." años" }}</div>
+                            <div class=""><span>Clase: </span>{{ $mascota->getTipoMascota()->nombre }}</div>
+                            <div class=""><span>Raza: </span>{{ $mascota->getRaza()->nombre }}</div>
+                        </div>
+                        <a href="{{ route("view.editMascota",$mascota->id) }}"><button type="submit" class="btn btn-primary">Editar</button></a>
+                    </div>
                 @endforeach
+            @else
+                <article class="alert alert-warning">Usted no tiene ninguna mascota registrada</article>
             @endif
+                <a href="{{ route("agregarMascotas") }}"><button type="submit" class="btn btn-default">Agregar Mascota</button></a>
          </div>
     </div>
 @endsection

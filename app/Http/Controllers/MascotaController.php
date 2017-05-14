@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\FotoPerfil;
 use App\Mascota;
 use App\Raza;
 use App\TipoMascota;
@@ -18,46 +19,9 @@ class MascotaController extends Controller
     }
 
     /**
-     * Define your validation rules in a property in
-     * the controller to reuse the rules.
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    /*protected $validationRules=[
-        'email' => 'required|email|unique:users'
-        'sexo' => 'max:1',
-        "fecha_nacimiento" => 'date'
-    ];*/
-
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index(){
-        $user = Auth::user();
-        $variables = array();
-
-        $perfil = $user->getPerfil();
-        if($fotoPerfil = $perfil->getFotoPerfil())
-            array_push($variables, "fotoPerfil");
-        if($mascotas = $perfil->getMascotas())
-            array_push($variables, "mascotas");
-
-        return view('mascotas', compact($variables));
-    }
-
-    public function agregarMascotaView(){
-        $user = Auth::user();
-        $variables = array();
-
-        $perfil = $user->getPerfil();
-        if($fotoPerfil = $perfil->getFotoPerfil())
-            array_push($variables, "fotoPerfil");
-
-        $razas = Raza::all();
-        array_push($variables, "razas");
-        $tipos = TipoMascota::all();
-        array_push($variables, "tipos");
-        return view('agregarMascotas', compact($variables));
-    }
-
     public function addMascota(Request $request){
         $user = Auth::user();
         $perfil = $user->getPerfil();
@@ -71,6 +35,7 @@ class MascotaController extends Controller
             'raza' => 'required'
         ]);
         $request->flash();
+
         $mascota = new Mascota();
         $mascota->nombre = $request->nombre;
         $mascota->sexo = $request->sexo;
@@ -80,8 +45,76 @@ class MascotaController extends Controller
 
         $perfil->mascotas()->save($mascota);
 
-        $raza = Raza::where("id", $request->raza)->first();
+        $raza = Raza::find($request->raza)->first();
         $raza->mascotas()->save($mascota);
 
+        return redirect()->route('mascotas');
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function editMascota(Request $request){
+        $user = Auth::user();
+
+        $this->validate($request, [
+            'nombre' => 'required|max:100',
+            'sexo' => 'required',
+            'edad' => 'required',
+            'apto_adopcion' => 'required',
+            'clase' => 'required',
+            'raza' => 'required'
+        ]);
+
+        $request->flash();
+
+        $mascota = Mascota::find($request->id);
+
+        $mascota->nombre = $request->nombre;
+        $mascota->sexo = $request->sexo;
+        $mascota->edad = $request->edad;
+        $mascota->otras_caracteristicas = $request->otras_caracteristicas;
+        $mascota->apto_adopcion = ($request->apto_adopcion == "si")?1:0;
+        $mascota->save();
+
+        if($request->raza != $mascota->getRaza()->id){
+            $raza = Raza::find($request->raza);
+            $raza->mascotas()->save($mascota);
+        }
+
+        return redirect()->back()->with('message', 'Los cambios se guardaron con exito.');
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function removeMascota(Request $request){
+        Mascota::destroy($request->id);
+        return redirect()->route('mascotas');
+    }
+
+    /**
+     * @param Request $request
+     * @return string
+     */
+    public function uploadPerfilImage(Request $request){
+        $user = Auth::user();
+        $mascota = Mascota::find($request->id);
+        //dd($request->id);
+        //Storage::delete('file.jpg');
+        $imgPerfilAnterior = $mascota->fotoPerfil()->where("current",1)->first();
+        if($imgPerfilAnterior){
+            $imgPerfilAnterior->current = 0;
+            // Storage::delete($imgPerfilAnterior->nombre);//la borro
+            $imgPerfilAnterior->save();
+        }
+
+        $path = $request->perfil_image->store('perfil_images');
+        $foto = new FotoPerfil();
+        $foto->nombre = $path;
+        $mascota->fotoPerfil()->save($foto);
+        return "/storage/".$path;
     }
 }

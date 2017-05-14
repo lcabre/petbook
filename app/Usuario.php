@@ -86,14 +86,6 @@ class Usuario extends Model
     }
 
     /**
-     * @return string
-     */
-    /*public function getFotoPerfilUrl(){
-        if($fotoPerfil = $this->fotoPerfil()->where("current", 1)->first())
-        return("/storage/".$fotoPerfil->nombre);
-    }*/
-
-    /**
      * @param Mascota $mascota
      */
     public function addMascotas(Mascota $mascota){
@@ -105,5 +97,13 @@ class Usuario extends Model
      */
     public function getMascotas(){
         return $this->mascotas()->get();
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getMascotaById($id){
+        return $this->mascotas()->where("id", $id)->first();
     }
 }

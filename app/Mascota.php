@@ -53,7 +53,7 @@ class Mascota extends Model
      */
     public function fotoPerfil()
     {
-        return $this->hasMany('App\FotoPerfil', 'id_usuario');
+        return $this->hasMany('App\FotoPerfil', 'id_mascota');
     }
 
     /**
@@ -64,5 +64,18 @@ class Mascota extends Model
         if($fotoPerfil = $this->fotoPerfil()->where("current", 1)->first())
             return($fotoPerfil);
         return false;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRaza(){
+        return $this->raza()->first();
+    }
+
+    public function getTipoMascota(){
+        $raza = $this->raza()->first();
+        $tipo = $raza->getTipo();
+        return $tipo;
     }
 }

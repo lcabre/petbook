@@ -51,4 +51,8 @@ class Raza extends Model
     {
         return $this->hasMany('App\Mascota', 'id_raza');
     }
+
+    public function getTipo(){
+        return $this->tipoMascota()->first();
+    }
 }
