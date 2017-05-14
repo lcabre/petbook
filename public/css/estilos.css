@@ -34,11 +34,21 @@ header .logo{
     padding-left: 3px;
     margin-top: 13px;
 }
-header .noificaciones{
-    float: left;
+header .notificaciones{
+    float: right;
     text-transform: uppercase;
-    padding-left: 10px;
+    padding-right: 10px;
     margin-top: 15px;
+}
+.notificaciones .badge{
+    margin-top: -4px;
+    background-color: #ED91A8;
+}
+.notificaciones i{
+    color: #ED5179;
+}
+.notificaciones p{
+    display: inline-block;
 }
 header .container{
     position: relative;
@@ -84,11 +94,23 @@ header .userpanel{
 .perfil{
     position: relative;
     padding-bottom: 5px;
+    margin-bottom: 5px;
 }
 .perfil .imgperfil{
     height: 100px;
     background-color: #2a88bd;
     border-radius: 3px 3px 0 0;
+}
+.imgperfil{
+    overflow: hidden;
+    position: relative;
+}
+.imgperfil img{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 100%;
 }
 .perfil .avatar{
     position: absolute;
@@ -98,6 +120,17 @@ header .userpanel{
     width: 60px;
     background-color: #2ab27b;
     border: 1px solid #ffffff;
+}
+.avatar{
+    overflow: hidden;
+    position: relative;
+}
+.avatar img{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 100%;
 }
 .perfil .nombre{
     left: 50px;
@@ -206,6 +239,37 @@ header .userpanel{
     /*border-bottom: 2px solid #E6E6E6;*/
     margin: 0;
 }
+.box ul{
+    margin: 0;
+    padding: 0;
+}
+.box ul li{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+box ul a{
+    text-decoration: none;
+}
+.box .lista{
+    margin-top: 10px;
+}
+.box .lista span{
+    padding: 0 5px 0 0;
+    color: #ED5179;
+    text-align: center;
+    display: inline-block;
+    min-width: 20px;
+}
+.box .lista span.badge{
+    background-color: #ED91A8;
+    color: #fff;
+    padding: 3px 7px;
+    margin-left: 10px;
+    margin-top: -3px;
+}
 .box .anuncio{
     display: inline-block;
     margin-top: 10px;
@@ -255,6 +319,23 @@ header .userpanel{
     border-bottom: 1px solid #CCC;
     margin-top: 15px;
 }
+.error{
+    display: none;
+    padding: 10px 15px!important;
+    margin-top: 25px!important;
+    margin-bottom: 0!important;
+}
+.fileinput .thumbnail {
+    max-width: 300px;
+}
+
+.fileinput button{
+    margin-top: 0;
+    margin-left: 5px;
+}
+.fileinput form{
+    display: none;
+}
 
 @media (max-width: 768px) {
     .padding-r{
@@ -262,6 +343,9 @@ header .userpanel{
     }
     .padding-l{
         padding-left: 0!important;
+    }
+    .notificaciones p{
+        display: none;
     }
 }
 
@@ -272,13 +356,18 @@ header .userpanel{
     }
 }
 
-@media (max-width: 293px) {
+@media (max-width: 400px) {
+    header .logo{
+        width: 100%;
+        margin-bottom: 5px;
+    }
     header .user {
-        padding: 10px 10px 10px 0;
         float: left;
     }
-    .noificaciones{
+    .notificaciones{
         width:100%;
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 }
 

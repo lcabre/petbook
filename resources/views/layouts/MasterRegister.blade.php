@@ -21,7 +21,7 @@
 <body>
     <header>
         <div class="container">
-            <div class="noificaciones">
+            <div class="logo">
                 <a href="{{ route("home") }}">
                     <img src="/img/logo.png" alt="PetBook, Red Social de Mascotas"></a>
             </div>

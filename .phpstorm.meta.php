@@ -3,7 +3,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2017-04-30.
+    * Generated on 2017-05-07.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -51,7 +51,6 @@ namespace PHPSTORM_META {
             'migration.generate' instanceof \Xethron\MigrationsGenerator\MigrateGenerateCommand,
             'Illuminate\Database\Migrations\MigrationRepositoryInterface' instanceof \Illuminate\Database\Migrations\DatabaseMigrationRepository,
             'Krlove\EloquentModelGenerator\EloquentModelBuilder' instanceof \Krlove\EloquentModelGenerator\EloquentModelBuilder,
-            'command.make.models' instanceof \Iber\Generator\Commands\MakeModelsCommand,
             'blade.compiler' instanceof \Illuminate\View\Compilers\BladeCompiler,
             'cache' instanceof \Illuminate\Cache\CacheManager,
             'cache.store' instanceof \Illuminate\Cache\Repository,
@@ -184,7 +183,6 @@ namespace PHPSTORM_META {
             'migration.generate' instanceof \Xethron\MigrationsGenerator\MigrateGenerateCommand,
             'Illuminate\Database\Migrations\MigrationRepositoryInterface' instanceof \Illuminate\Database\Migrations\DatabaseMigrationRepository,
             'Krlove\EloquentModelGenerator\EloquentModelBuilder' instanceof \Krlove\EloquentModelGenerator\EloquentModelBuilder,
-            'command.make.models' instanceof \Iber\Generator\Commands\MakeModelsCommand,
             'blade.compiler' instanceof \Illuminate\View\Compilers\BladeCompiler,
             'cache' instanceof \Illuminate\Cache\CacheManager,
             'cache.store' instanceof \Illuminate\Cache\Repository,
@@ -317,7 +315,6 @@ namespace PHPSTORM_META {
             'migration.generate' instanceof \Xethron\MigrationsGenerator\MigrateGenerateCommand,
             'Illuminate\Database\Migrations\MigrationRepositoryInterface' instanceof \Illuminate\Database\Migrations\DatabaseMigrationRepository,
             'Krlove\EloquentModelGenerator\EloquentModelBuilder' instanceof \Krlove\EloquentModelGenerator\EloquentModelBuilder,
-            'command.make.models' instanceof \Iber\Generator\Commands\MakeModelsCommand,
             'blade.compiler' instanceof \Illuminate\View\Compilers\BladeCompiler,
             'cache' instanceof \Illuminate\Cache\CacheManager,
             'cache.store' instanceof \Illuminate\Cache\Repository,
@@ -450,7 +447,6 @@ namespace PHPSTORM_META {
             'migration.generate' instanceof \Xethron\MigrationsGenerator\MigrateGenerateCommand,
             'Illuminate\Database\Migrations\MigrationRepositoryInterface' instanceof \Illuminate\Database\Migrations\DatabaseMigrationRepository,
             'Krlove\EloquentModelGenerator\EloquentModelBuilder' instanceof \Krlove\EloquentModelGenerator\EloquentModelBuilder,
-            'command.make.models' instanceof \Iber\Generator\Commands\MakeModelsCommand,
             'blade.compiler' instanceof \Illuminate\View\Compilers\BladeCompiler,
             'cache' instanceof \Illuminate\Cache\CacheManager,
             'cache.store' instanceof \Illuminate\Cache\Repository,

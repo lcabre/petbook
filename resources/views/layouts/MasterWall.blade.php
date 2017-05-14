@@ -26,9 +26,6 @@
                     <img src="/img/logo.png" alt="PetBook, Red Social de Mascotas">
                 </a>
             </div>
-            <div class="noificaciones">
-                Notificaciones
-            </div>
             @if (Auth::check())
                 <div class="user rounded-border"> {{ Auth::user()->email }} <i class="fa fa-chevron-down" aria-hidden="true"></i>
                     <div class="userpanel">
@@ -37,6 +34,11 @@
                     </div>
                 </div>
             @endif
+            <div class="notificaciones">
+                <i class="fa fa-bell" aria-hidden="true"></i>
+                <p>Notificaciones</p>
+                <span class="badge">12</span>
+            </div>
         </div>
     </header>
     <div class="container">

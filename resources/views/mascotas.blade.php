@@ -1,5 +1,6 @@
 @extends('layouts.MasterPerfil')
 
+<?php /** @var App\FotoPerfil $fotoPerfil */ ?>
 @section("perfil")
     <div class="perfil rounded-border ">
         <div class="imgperfil">
@@ -37,158 +38,28 @@
     </div>
 @endsection
 
-<?php /** @var App\Usuario $perfil */ ?>
+<?php /** @var App\Usuario $mascota */ ?>
 @section("content")
     <div class="generalbox rounded-border ">
         <h1>
-            Datos de Usuario
+            Mis Mascotas
         </h1>
         <div class="content">
-            <div class="fila">
-                <div class="name">Email</div>
-                <div class="dato">
-                    <span>{{ Auth::user()->email }}</span>
-                    <div class="edit">Editar</div>
-                </div>
-                <div class="editdato">
-                    <input type="email" class="form-control" name="email" value="{{ Auth::user()->email }}">
-                    <div class="edit">Editar</div>
-                    <div class="cancel">Cancelar</div>
-                </div>
-                <div class="error alert alert-danger"></div>
-            </div>
-            <div class="fila">
-                <div class="name">Nombre</div>
-                <div class="dato">
-                    <span> @if($perfil->nombre) {{ $perfil->nombre }} @else No ingresado @endif</span>
-                    <div class="edit">Editar</div>
-                </div>
-                <div class="error alert alert-danger"></div>
-                <div class="editdato">
-                    <input type="text" class="form-control" name="nombre" value="{{ $perfil->nombre }}">
-                    <div class="edit">Editar</div>
-                    <div class="cancel">Cancelar</div>
-                </div>
-            </div>
-            <div class="fila">
-                <div class="name">Domicilio</div>
-                <div class="dato">
-                    <span> @if($perfil->domicilio) {{ $perfil->domicilio }} @else No ingresado @endif</span>
-                    <div class="edit">Editar</div>
-                </div>
-                <div class="error alert alert-danger"></div>
-                <div class="editdato">
-                    <input type="text" class="form-control" name="domicilio" value="{{ $perfil->domicilio }}">
-                    <div class="edit">Editar</div>
-                    <div class="cancel">Cancelar</div>
-                </div>
-            </div>
-            <div class="fila">
-                <div class="name">Telefono</div>
-                <div class="dato">
-                    <span> @if($perfil->telefono) {{ $perfil->telefono }} @else No ingresado @endif</span>
-                    <div class="edit">Editar</div>
-                </div>
-                <div class="error alert alert-danger"></div>
-                <div class="editdato">
-                    <input type="text" class="form-control" name="telefono" value="{{ $perfil->telefono }}">
-                    <div class="edit">Editar</div>
-                    <div class="cancel">Cancelar</div>
-                </div>
-            </div>
-            <div class="fila">
-                <div class="name">Sexo</div>
-                <div class="dato">
-                    <span> @if($perfil->sexo) {{ $perfil->sexo }} @else No ingresado @endif</span>
-                    <div class="edit">Editar</div>
-                </div>
-                <div class="error alert alert-danger"></div>
-                <div class="editdato">
-                    <select class="selectpicker" name="sexo">
-                        <option value=""  @if($perfil->sexo=="") selected @endif>Seleccione su Sexo</option>
-                        <option value="M" @if($perfil->sexo=="M") selected @endif>M</option>
-                        <option value="F" @if($perfil->sexo=="F") selected @endif>F</option>
-                    </select>
-                    <div class="edit">Editar</div>
-                    <div class="cancel">Cancelar</div>
-                </div>
-            </div>
-            <div class="fila">
-                <div class="name">Fecha de Nacimiento</div>
-                <div class="dato">
-                    <span>
-                        @if($perfil->fecha_nacimiento)
-                            {{ $perfil->fecha_nacimiento->format('d-m-Y') }}
-                        @else
-                            No ingresado
-                        @endif
-                    </span>
-                    <div class="edit">Editar</div>
-                </div>
-                <div class="error alert alert-danger"></div>
-                <div class="editdato">
-                    <input type="text" class="form-control fecha_nacimiento" name="fecha_nacimiento" value="@if($perfil->fecha_nacimiento){{ $perfil->fecha_nacimiento->format('d-m-Y') }}@endif">
-                    <div class="edit">Editar</div>
-                    <div class="cancel">Cancelar</div>
-                </div>
-            </div>
+            @if(isset($mascotas))
+                @foreach($mascotas as $mascota)
+                    <article>
+                        <h2>{{ $mascota->nombre }}</h2>
+                        <div class="img"><img src="{{ $mascota->getFotoPerfil()->getUrl() }}" alt=""></div>
+                    </article>
+                @endforeach
+            @endif
          </div>
-    </div>
-    <div class="generalbox rounded-border">
-        <h1>Imagen de Perfil</h1>
-        <div class="content">
-            <form action="" name="form" class="perfil_form">
-            <div class="fileinput fileinput-new" data-provides="fileinput">
-                <div class="fileinput-new thumbnail" >
-                    <img src="/img/default-perfil.jpg" alt="...">
-                </div>
-                <div class="fileinput-preview fileinput-exists thumbnail" ></div>
-                <div>
-                    <span class="btn btn-default btn-file">
-                        <span class="fileinput-new">Seleccionar Imagen</span>
-                        <span class="fileinput-exists">Cambiar</span>
-
-                            <input type="file" name="perfil_image" class="perfil_image">
-
-                    </span>
-                    <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Cancelar</a>
-                    <button class="btn  btn-default" id="saveimage">Guardar</button>
-                </div>
-            </div>
-            </form>
-        </div>
     </div>
 @endsection
 
 @section("anuncios")
     <div class="box rounded-border ">
-        <h1>Anuncios</h1>
-        <div class="anuncio">
-            <div class="avatar">
 
-            </div>
-            <div class="content">
-                <div class="name">
-                    Bingo
-                </div>
-                <div class="tipo">
-                    Buscando cita
-                </div>
-            </div>
-        </div>
-        <div class="anuncio">
-            <div class="avatar">
-
-            </div>
-            <div class="content">
-                <div class="name">
-                    Pepe
-                </div>
-                <div class="tipo">
-                    Buscando cita
-                </div>
-            </div>
-        </div>
     </div>
 @endsection
 
@@ -197,9 +68,6 @@
         <div class="imgperfil">
 
         </div>
-
-
-        qweqwe
     </div>
 @endsection
 

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Mascota;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\User;
 use App\Usuario;
+use App\FotoPerfil;
 use Illuminate\Support\Facades\Auth;
+use Storage;
 
-class UserController extends Controller
+class PerfilController extends Controller
 {
 
     function __construct()
@@ -17,15 +20,27 @@ class UserController extends Controller
     }
 
     /**
+     * Define your validation rules in a property in
+     * the controller to reuse the rules.
+     */
+    /*protected $validationRules=[
+        'email' => 'required|email|unique:users'
+        'sexo' => 'max:1',
+        "fecha_nacimiento" => 'date'
+    ];*/
+
+    /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(){
         $user = Auth::user();
-        $perfil = $user->usuario()->first();
-        if(!$perfil){
-            $perfil = $user->addPerfil($user);
-        }
-        return view('perfil', compact("perfil"));
+        $variables = array();
+
+        $perfil = $user->getPerfil();
+        array_push($variables, "perfil");
+        if($fotoPerfil = $perfil->getFotoPerfil())
+            array_push($variables, "fotoPerfil");
+        return view('perfil', compact($variables));
     }
 
     public function editDatos(){
@@ -36,9 +51,38 @@ class UserController extends Controller
 
     /**
      * @param Request $request
+     * @return string
+     */
+    public function uploadPerfilImage(Request $request){
+        $user = Auth::user();
+        $perfil = $user->usuario()->first();
+
+        //Storage::delete('file.jpg');
+        $imgPerfilAnterior = $perfil->fotoPerfil()->where("current",1)->first();
+        if($imgPerfilAnterior){
+           $imgPerfilAnterior->current = 0;
+          // Storage::delete($imgPerfilAnterior->nombre);//la borro
+           $imgPerfilAnterior->save();
+        }
+
+        $path = $request->perfil_image->store('perfil_images');
+        $foto = new FotoPerfil();
+        $foto->nombre = $path;
+        $perfil->fotoPerfil()->save($foto);
+        return "/storage/".$path;
+    }
+
+    /**
+     * @param Request $request
      * @return mixed|null
      */
     public function editData(Request $request){
+        $this->validate($request, [
+            'email' => 'email|unique:User',
+            'sexo' => 'max:1',
+            'fecha_nacimiento' => 'date',
+        ]);
+
         $user = Auth::user();
         $perfil = $user->usuario()->first();
         (isset($request["email"]))?$email = (string)$request["email"]:null;

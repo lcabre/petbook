@@ -21,7 +21,7 @@
 <body>
 <header>
     <div class="container">
-        <div class="noificaciones">
+        <div class="logo">
             <a href="{{ route("home") }}"><img src="/img/logo.png" alt="PetBook, Red Social de Mascotas"></a>
         </div>
         <div class="user rounded-border">
@@ -29,6 +29,7 @@
             <a href="{{ route("login") }}">Inicia Sesión</a>
         </div>
     </div>
+
 </header>
 @yield("content")
 <script src="{{ asset('js/app.js') }}"></script>

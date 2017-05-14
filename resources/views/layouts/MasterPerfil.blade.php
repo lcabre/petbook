@@ -12,7 +12,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/bootstrap-datepicker.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-select.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/jasny-bootstrap.min.css') }}">
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
@@ -28,9 +29,6 @@
                     <img src="/img/logo.png" alt="PetBook, Red Social de Mascotas">
                 </a>
             </div>
-            <div class="noificaciones">
-                Perfil
-            </div>
             @if (Auth::check())
                 <div class="user rounded-border"> {{ Auth::user()->email }} <i class="fa fa-chevron-down" aria-hidden="true"></i>
                     <div class="userpanel">
@@ -38,11 +36,17 @@
                     </div>
                 </div>
             @endif
+            <div class="notificaciones">
+                <i class="fa fa-bell" aria-hidden="true"></i>
+                <p>Notificaciones</p>
+                <span class="badge">12</span>
+            </div>
         </div>
     </header>
     <div class="container">
         <aside class="col-lg-3 col-md-3 col-sm-3 col-xs-12 padding-r">
             @yield("perfil")
+            @yield("menu")
         </aside>
         <section class="col-lg-9 col-md-9 col-sm-9 col-xs-12 padding">
             @yield("content")
@@ -52,6 +56,7 @@
     <script src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap-datepicker.es.js') }}"></script>
     <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
+    <script src="{{ asset('js/jasny-bootstrap.min.js') }}"></script>
     @yield("javascript")
 </body>
 </html>

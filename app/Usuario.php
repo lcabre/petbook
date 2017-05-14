@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $created_at
  * @property User $user
  * @property Adopta[] $adoptas
- * @property FotoPerfil[] $fotoPerfils
+ * @property FotoPerfil[] $fotoPerfil
  * @property Mascota[] $mascotas
  * @property Sigue[] $sigues
  */
@@ -33,7 +33,7 @@ class Usuario extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_user', 'nombre', 'domicilio', 'telefono', 'geoposicion', 'sexo', 'fecha_nacimiento', 'updated_at', 'created_at'];
+    protected $fillable = ['id_user', 'nombre', 'domicilio', 'telefono', 'geoposicion', 'sexo', 'fecha_nacimiento'];
     protected $dates = ['fecha_nacimiento'];
 
     /**
@@ -55,7 +55,7 @@ class Usuario extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function fotoPerfils()
+    public function fotoPerfil()
     {
         return $this->hasMany('App\FotoPerfil', 'id_usuario');
     }
@@ -74,5 +74,36 @@ class Usuario extends Model
     public function sigues()
     {
         return $this->hasMany('App\Sigue', 'id_usuario_2');
+    }
+
+    /**
+     * @return string
+     */
+    public function getFotoPerfil(){
+        if($fotoPerfil = $this->fotoPerfil()->where("current", 1)->first())
+            return($fotoPerfil);
+        return false;
+    }
+
+    /**
+     * @return string
+     */
+    /*public function getFotoPerfilUrl(){
+        if($fotoPerfil = $this->fotoPerfil()->where("current", 1)->first())
+        return("/storage/".$fotoPerfil->nombre);
+    }*/
+
+    /**
+     * @param Mascota $mascota
+     */
+    public function addMascotas(Mascota $mascota){
+        $this->mascotas()->save($mascota);
+    }
+
+    /**
+     * @return Mascota
+     */
+    public function getMascotas(){
+        return $this->mascotas()->get();
     }
 }
