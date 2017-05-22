@@ -40,11 +40,16 @@ class ViewController extends Controller
         return view('wall', compact($variables));
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function indexMascota(){
         $user = Auth::user();
         $variables = array();
 
         $perfil = $user->getPerfil();
+        array_push($variables, "perfil");
+
         if($fotoPerfil = $perfil->getFotoPerfil())
             array_push($variables, "fotoPerfil");
         if($mascotas = $perfil->getMascotas())
@@ -53,6 +58,9 @@ class ViewController extends Controller
         return view('mascotas', compact($variables));
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function agregarMascota(){
         $user = Auth::user();
         $variables = array();
@@ -82,12 +90,19 @@ class ViewController extends Controller
         return view('perfil', compact($variables));
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function editDatosPerfil(){
         $user = Auth::user();
         $perfil = $user->usuario()->first();
         return view('editdatos', compact("perfil"));
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function editMascota($id){
         $user = Auth::user();
         $variables = array();
@@ -103,5 +118,21 @@ class ViewController extends Controller
 
 
         return view('editmascota', compact($variables));
+    }
+
+    public function wallMascota($id){
+        $variables = array();
+
+        $mascota = Mascota::find($id);
+        array_push($variables, "mascota");
+
+        $posts = $mascota->getPosts();
+        array_push($variables, "posts");
+
+        //$mascotasParaSeguir = Mascota::take(3)->get();
+        $mascotasParaSeguir = $mascota->getNoSeguidos();
+        array_push($variables, "mascotasParaSeguir");
+
+        return view('wallmascota', compact($variables));
     }
 }

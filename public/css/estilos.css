@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700');
 @font-face {
     font-family: 'Bebas-Neue-Light';
     src:  url('/fonts/Bebas-Neue-Light.ttf.woff') format('woff'),
@@ -16,6 +17,7 @@
     font-weight: normal;
     font-style: normal;
 }
+
 body{
     background-color: #EEF1F2!important;
     color: #b3b3b3!important;
@@ -41,7 +43,9 @@ header .notificaciones{
     padding-right: 10px;
     margin-top: 15px;
 }
-
+textarea{
+    max-width: 100%;
+}
 .btn-group{
     float: right;
     margin: 0!important;
@@ -99,6 +103,9 @@ header .userpanel{
 .publicaciones, .perfil, .ranking, .generalbox{
     background-color: #FFFFFF;
 }
+.publicaciones:not(:first-child){
+    margin-top: 7px;
+}
 .perfil{
     position: relative;
     padding-bottom: 5px;
@@ -132,13 +139,15 @@ header .userpanel{
 .avatar{
     overflow: hidden;
     position: relative;
+    border-radius: 5px;
 }
 .avatar img{
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
-    width: 100%;
+    width: 140%;
+    max-width: none!important;
 }
 .nombre{
     font-weight: 600;
@@ -164,8 +173,8 @@ header .userpanel{
     margin-top: -8px;
 }
 .publicaciones .avatar{
-    height: 40px;
-    width: 40px;
+    height: 55px;
+    width: 55px;
     background-color: #2ab27b;
     border: 1px solid #ffffff;
     margin-top: 10px;
@@ -184,12 +193,24 @@ header .userpanel{
     padding: 12px;
 }
 .name{
+    font-family: 'Quicksand', sans-serif;
     font-size: 16px;
     font-weight: 600;
+    margin-top: 2px;
+}
+.name .fecha{
+    float: right;
+    font-size: 13px;
+    font-weight: 400;
+    margin-top: 2px;
+}
+.anuncio .name, .seguir .name{
+    margin-top: 0;
 }
 .publicaciones .post{
     display: inline-block;
     border-top: 1px solid #E6E6E6;
+    width: 100%;
 }
 .publicaciones .post:first-of-type{
     border-top: none;
@@ -198,7 +219,47 @@ header .userpanel{
 .publicaciones .post img{
     max-width: 100%;
 }
-
+.publicaciones .post .content img{
+    margin-top: 5px;
+}
+.post p{
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+.publicaciones .post textarea{
+    margin-bottom: 5px;
+    border-color: #6DC5EB;
+}
+.newpost{
+    background-color: #DDF2FB;
+}
+.newpost .content{
+    display: flex;
+}
+.newpost .newimage {
+    float: left;
+    font-size: 23px;
+    padding-left: 10px;
+    color: #53BDEB;
+    cursor: pointer;
+}
+.inline{
+    display: inline;
+}
+.newpost button{
+    float: right;
+}
+.fileinput {
+    margin-bottom: 0!important;
+    width:100%;
+}
+.newpost .fileinput-exists{
+    cursor: pointer;
+}
+.post form {
+    display: inline-block;
+    width: 100%;
+}
 .generalbox, .generalbox .content{
     float: left;
     width: 100%;
@@ -285,9 +346,19 @@ box ul a{
     margin-left: 10px;
     margin-top: -3px;
 }
-.box .anuncio{
+.box .anuncio, .box .seguir{
     display: inline-block;
     margin-top: 10px;
+    width: 100%;
+}
+.seguir button{
+    margin-top: 6px;
+    background-color: white;
+    border-color: #2a88bd;
+    color: #2a88bd;
+}
+.seguir a{
+    float: right;
 }
 .box .content{
     padding-left: 10px;
@@ -296,8 +367,8 @@ box ul a{
     margin-top: -5px;
 }
 .box .avatar{
-    height: 40px;
-    width: 40px;
+    height: 55px;
+    width: 55px;
     background-color: #2ab27b;
     border: 1px solid #ffffff;
     float: left;
@@ -401,6 +472,9 @@ box ul a{
         width:100%;
         margin-top: 10px;
         margin-bottom: 10px;
+    }
+    body {
+        padding-top: 137px;
     }
 }
 

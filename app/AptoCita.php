@@ -27,7 +27,7 @@ class AptoCita extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_mascota', 'id_usuario', 'id_raza', 'tamanio', 'radio_km'];
+    protected $fillable = ['id_mascota', 'id_raza', 'tamanio', 'radio_km'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -35,5 +35,13 @@ class AptoCita extends Model
     public function raza()
     {
         return $this->belongsTo('App\Raza', 'id_raza');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function mascota()
+    {
+        return $this->belongsTo('App\Mascota', 'id_mascota');
     }
 }

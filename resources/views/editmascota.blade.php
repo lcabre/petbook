@@ -17,7 +17,11 @@
             @endif
         </div>
         <div class="nombre">
-            {{ auth()->user()->getPerfil()->nombre }}
+            @if($mascota->nombre)
+                {{ $mascota->nombre }}
+            @else
+                <br>
+            @endif
         </div>
         <div class="numeros">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">

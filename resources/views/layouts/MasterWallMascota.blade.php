@@ -53,6 +53,7 @@
             @yield("content")
         </section>
         <aside class="col-lg-3 col-md-3 col-sm-3 col-xs-12 padding-l">
+            @yield("seguir")
             @yield("anuncios")
             @yield("ranking")
         </aside>

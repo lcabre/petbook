@@ -69,14 +69,6 @@ class Usuario extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function sigues()
-    {
-        return $this->hasMany('App\Sigue', 'id_usuario_2');
-    }
-
-    /**
      * @return string
      */
     public function getFotoPerfil(){

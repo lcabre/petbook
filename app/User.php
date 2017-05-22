@@ -53,20 +53,21 @@ class User extends Authenticatable
         $this->save();
     }
 
+
     /**
-     *
+     * @return false|Usuario
      */
     public function addPerfil(){
         $perfil = new Usuario();
-        $this->usuario()->save($perfil);
+        return $this->usuario()->save($perfil);
     }
 
     /**
-     * @return Usuario[]
+     * @return false|Usuario
      */
     public function getPerfil(){
-        if(!$this->usuario)
-            $this->addPerfil();
+        if(!$this->usuario()->first())
+            return $this->addPerfil();
 
         return $this->usuario()->first();
     }

@@ -41,6 +41,22 @@ class Mascota extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function seguidores()
+    {
+        return $this->belongsToMany('App\Mascota', 'sigue', 'id_mascota2', 'id_mascota')->withTimestamps();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function seguidos()
+    {
+        return $this->belongsToMany('App\Mascota', 'sigue', 'id_mascota', 'id_mascota2')->withTimestamps();
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function raza()
@@ -54,6 +70,22 @@ class Mascota extends Model
     public function fotoPerfil()
     {
         return $this->hasMany('App\FotoPerfil', 'id_mascota');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function posts()
+    {
+        return $this->hasMany('App\Post', 'id_mascota');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function aptoCitas()
+    {
+        return $this->hasMany('App\AptoCita', 'id_mascota');
     }
 
     /**
@@ -73,9 +105,27 @@ class Mascota extends Model
         return $this->raza()->first();
     }
 
+    /**
+     * @return mixed
+     */
     public function getTipoMascota(){
         $raza = $this->raza()->first();
         $tipo = $raza->getTipo();
         return $tipo;
+    }
+
+    public function getPosts(){
+        return $this->posts()->orderBy("created_at", "desc")->get();
+    }
+
+    /**
+     * @return false|Mascota
+     */
+    public function getNoSeguidos(){
+        $noSeguidos = Mascota::whereHas( 'usuario', function($sQuery){
+            $sQuery->where('id_usuario', '!=', $this->usuario()->first()->id );
+        })->orderBy("updated_at", "desc")->limit(3)->get();
+
+        return $noSeguidos;
     }
 }

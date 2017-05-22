@@ -15,9 +15,12 @@
             @endif
         </div>
         <div class="nombre">
-            @if(auth()->user()->getPerfil()->mascotas())
-                {{ auth()->user()->getPerfil()->mascotas()->first()->nombre }}
+            @if($perfil->mascotas()->first())
+                {{ $perfil->mascotas()->first()->nombre }}
+            @else
+                <br>
             @endif
+
         </div>
         <div class="numeros">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -69,6 +72,7 @@
         </div>
     </div>
 @endsection
+
 @section("anuncios")
     <div class="box rounded-border ">
         <h1>Anuncios</h1>
@@ -100,6 +104,7 @@
         </div>
     </div>
 @endsection
+
 @section("ranking")
     <div class="box rounded-border ">
         <div class="imgperfil">
@@ -119,7 +124,7 @@
         <div class="lista">
             <ul>
                 @foreach($mascotas as $mascota)
-                    <a href="#{{-- $mascota->id --}}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>{{ $mascota->nombre }}</li></a>
+                    <a href="{{ route("wallMascota", $mascota->id) }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>{{ $mascota->nombre }}</li></a>
                 @endforeach
             </ul>
         </div>
