@@ -35,11 +35,11 @@ class Post extends Model
     protected $fillable = ['id_mascota', 'titulo', 'descripcion', 'updated_at', 'created_at'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function likes()
     {
-        return $this->hasMany('App\Like', 'id_post');
+        return $this->belongsToMany('App\Mascota', 'likes', 'id_post', 'id_mascota')->withTimestamps();
     }
 
     /**
@@ -67,6 +67,14 @@ class Post extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function comentarios()
+    {
+        return $this->belongsToMany('App\Mascota', 'comentario', 'id_post', 'id_mascota')->withTimestamps()->withPivot('id','comentario');
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function mascota()
@@ -88,5 +96,13 @@ class Post extends Model
      */
     public function getMascota(){
         return $this->mascota()->first();
+    }
+
+    public function getComentarios(){
+        return $this->comentarios()->orderBy("comentario.created_at", "desc")->get();
+    }
+
+    public function isLikedBy($idMascota){
+       return $this->likes()->find($idMascota);
     }
 }

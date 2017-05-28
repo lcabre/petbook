@@ -1,10 +1,12 @@
-@extends('layouts.MasterWall')
+@extends('layouts.MasterWallMascota')
 
 @section("perfil")
     <div class="perfil rounded-border ">
         <div class="imgperfil">
-            @if(isset($fotoPerfil))
-                <img src="{{$fotoPerfil->getUrl()}}" alt="">
+            @if( $mascota->getFotoPerfil())
+                <img src="{{ $mascota->getFotoPerfil()->getUrl() }}" alt="">
+            @else
+                <img src="/img/defaul_perfil_img_mascota.jpg" alt="">
             @endif
         </div>
         <div class="avatar rounded-border">
@@ -15,8 +17,8 @@
             @endif
         </div>
         <div class="nombre">
-            @if($perfil->mascotas()->first())
-                {{ $perfil->mascotas()->first()->nombre }}
+            @if($mascota)
+                {{ $mascota->nombre }}
             @else
                 <br>
             @endif
@@ -41,13 +43,15 @@
         </div>
     </div>
 @endsection
+<?php /** @var App\Post $post */ ?>
 @section("content")
     <div class="publicaciones rounded-border ">
-        <h1>
+        <!--<h1>
             Publicaciones
-        </h1>
-        @if($postDeMascotas->isNotEmpty())
-            @foreach($postDeMascotas as $post )
+        </h1>-->
+
+        @if($posts->isNotEmpty())
+            @foreach($posts as $post )
                 <div class="post">
                     <div class="avatar rounded-border">
                         @if($fotoPerfil = $post->getMascota()->getFotoPerfil())
@@ -63,6 +67,18 @@
                             <img src="{{ $post->getFoto()->getUrl() }}" alt="">
                         @endif
                         <p>{{ $post->descripcion }}</p>
+                        <div class="social">
+                            @if($post->isLikedBy(Session::get('idMascotaActiva')))
+                                <span class="megusta"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Me gusta</span>
+                            @else
+                                <form action="{{ route("meGusta") }}" method="POST">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="idmascota" value="{{ Session::get('idMascotaActiva')}}">
+                                    <input type="hidden" name="idpost" value="{{ $post->id }}">
+                                    <span class="nomegusta"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Me gusta</span>
+                                </form>
+                            @endif
+                        </div>
                     </div>
                     <div class="comentarios">
                         @if($comentarios = $post->getComentarios())
@@ -80,16 +96,58 @@
                                 </div>
                             @endforeach
                         @endif
+                        <div class="content">
+                            <form action="{{ route("newComentario") }}" method="post" class="post_form" id="form-comentario" enctype="multipart/form-data">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="idmascota" value="{{ Session::get('idMascotaActiva')}}">
+                                <input type="hidden" name="idpost" value="{{ $post->id }}">
+                                <textarea name="comentario" class="form-control comentariotext" rows="1" placeholder="Escribe tu comentario" onkeyup="textAreaAdjust(this)"></textarea>
+                                <button type="submit" class="btn btn-primary small" id="newpost">Comentar</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             @endforeach
         @else
             <div class="post">
                 <div class="content">
-                <div class="alert alert-warning">No posee Comentarios Aun</div>
+                    <div class="alert alert-warning">No posee Comentarios Aun</div>
                 </div>
             </div>
         @endif
+    </div>
+@endsection
+
+@section("seguir")
+    <div class="box rounded-border">
+        <h1>A quien Seguir</h1>
+        <div class="row">
+        @foreach($mascotasParaSeguir as $mascotaParaSeguir)
+            <form action="{{ route("seguir") }}" method="post">
+                {{ csrf_field() }}
+                <input type="hidden" name="id_sigue" value="{{ $mascota->id }}">
+                <input type="hidden" name="id_seguida" value="{{ $mascotaParaSeguir->id }}">
+                <div class="seguir  col-xs-6 col-md-12 col-sm-12 col-lg-12">
+                    <div class="avatar">
+                        @if( $mascotaParaSeguir->getFotoPerfil())
+                            <img src="{{ $mascotaParaSeguir->getFotoPerfil()->getUrl() }}" alt="">
+                        @else
+                            <img src="/img/defaul_perfil_img.jpg" alt="">
+                        @endif
+                    </div>
+                    <div class="content">
+                        <div class="name">
+                            {{ $mascotaParaSeguir->nombre }}
+                        </div>
+                        <div class="tipo">
+                            <button type="submit" class="btn btn-primary btn-xs">Seguir</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        @endforeach
+            <div class="seguir col-xs-6 col-md-12 col-sm-12 col-lg-12"><a href="{{ route("view.aquienseguir", $mascota->id) }}">ver todos</a></div>
+        </div>
     </div>
 @endsection
 
@@ -124,7 +182,6 @@
         </div>
     </div>
 @endsection
-
 @section("ranking")
     <div class="box rounded-border ">
         <div class="imgperfil">
@@ -139,27 +196,24 @@
 <?php /** @var App\Usuario $mascota */ ?>
 @section("menumascotas")
     <div class="box rounded-border ">
-        <h1>Mis Mascotas</h1>
-        @if($mascotas->count())
+        <h1>Menú</h1>
         <div class="lista">
             <ul>
-                @foreach($mascotas as $mascota)
-                    <a href="{{ route("wallMascota", $mascota->id) }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>{{ $mascota->nombre }}</li></a>
-                @endforeach
-                    <a href="{{route("mascotas")}}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Administrar</li></a>
+                <a href="{{ route("view.editMascota", $mascota->id) }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Editar informaciónn</li></a>
             </ul>
-
+            <ul>
+                <a href="{{ route("view.seguidos", $mascota->id) }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Seguidos</li></a>
+            </ul>
         </div>
-        @else
-            <div class="alert alert-warning">No posee mascotas</div>
-            Ingrese <a href="{{ route("agregarMascotas") }}">Aquí</a> para agregar una.
-        @endif
     </div>
 @endsection
 
 @section("javascript")
     <script>
         $(document).ready(function(){
+            $(".nomegusta").click(function () {
+               $(this).parent().submit();
+            });
             $(".fa-chevron-down").click(function(){
                 console.log("dasasd");
                 if($(".userpanel").is(":visible"))
@@ -171,13 +225,7 @@
                     $(this).addClass('fa-chevron-up');
                 }
                 $(".userpanel").slideToggle("fast");
-            })
-
+            });
         });
-
-        function textAreaAdjust(ta) {
-            ta.style.height = "1px";
-            ta.style.height = (1+ta.scrollHeight)+"px";
-        }
     </script>
 @endsection

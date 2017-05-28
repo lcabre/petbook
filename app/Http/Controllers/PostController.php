@@ -33,6 +33,16 @@ class PostController extends Controller
             $foto->save();
             $post->fotos()->attach($foto->id);
         }
-        return redirect()->route('wallMascota', $mascota->id);
+
+        return redirect()->back();
+    }
+
+    public function meGusta(Request $request){
+        $mascota = Mascota::find($request->idmascota);
+        $post = Post::find($request->idpost);
+
+        $mascota->likes()->attach($post);
+
+        return redirect()->back();
     }
 }

@@ -117,4 +117,12 @@ class MascotaController extends Controller
         $mascota->fotoPerfil()->save($foto);
         return "/storage/".$path;
     }
+
+    public function seguir(Request $request){
+        $mascotaSeguidora = Mascota::find($request->id_sigue);
+        $mascotaSeguida = Mascota::find($request->id_seguida);
+        //dd([$mascotaSeguida, $mascotaSeguidora]);
+        $mascotaSeguidora->seguir($mascotaSeguida);
+        return redirect()->back();
+    }
 }

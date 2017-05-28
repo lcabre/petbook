@@ -53,14 +53,14 @@
 
                 @foreach($mascotas as $mascota)
                     <div class="row mascota">
-                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                             @if( $mascota->getFotoPerfil())
                                 <img src="{{ $mascota->getFotoPerfil()->getUrl() }}" alt="">
                             @else
-                                <img src="/img/defaul_perfil_img_mascota.jpg" alt="">
+                                <img src="/img/defaul_perfil_img - copia.jpg" alt="">
                             @endif
                         </div>
-                        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                        <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
                             <div class="nombre">{{ $mascota->nombre }}</div>
                             <div class="">{{ ($mascota->sexo == "H")?"Macho":"Hembra" }}</div>
                             <div class="">{{ $mascota->edad." años" }}</div>

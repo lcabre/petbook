@@ -21,7 +21,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/wall', 'ViewController@indexWall')->name('wall');
 Route::get('/wall/mascota/{id}', 'ViewController@wallMascota')->name("wallMascota");
+Route::get('/wall/seguido/{id}', 'ViewController@wallSeguido')->name('view.wallseguido');
 Route::get('/perfil', 'ViewController@indexPerfil')->name('perfil');
+Route::get('/seguidos/{id}', 'ViewController@seguidos')->name('view.seguidos');
+Route::get('/aquienseguir/{id}', 'ViewController@aQuienSeguir')->name('view.aquienseguir');
 Route::get('/mascotas', 'ViewController@indexMascota')->name('mascotas');
 Route::get('/mascotas/agregar', 'ViewController@agregarMascota')->name('agregarMascotas');
 Route::get('/mascotas/edit/{id}', 'ViewController@editMascota')->name("view.editMascota")->middleware('isOwner');
@@ -33,6 +36,10 @@ Route::post('/mascotas/edit/', 'MascotaController@editMascota')->name("editMasco
 Route::post('/mascotas/remove/', 'MascotaController@removeMascota')->name("removeMascota");
 Route::post('/mascotas/uploadperfilimage', 'MascotaController@uploadPerfilImage')->name('mascotas/uploadperfilimage');
 Route::post('/mascotas/post/newpost', 'postController@newPost')->name("newPost");
+Route::post('/mascotas/post/megusta', 'postController@meGusta')->name("meGusta");
+Route::post('/mascotas/seguir', 'MascotaController@seguir')->name("seguir");
+Route::post('/mascotas/posts/comentar', 'ComentarioController@newComentario')->name("newComentario");
+
 
 Route::get('/raza/{id}', 'RazaController@getById')->name("getRazaById");
 Route::get('/raza/tipo/{idTipo}', 'RazaController@getByTipo')->name("getRazaByTipo");

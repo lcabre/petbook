@@ -69,6 +69,14 @@ class Usuario extends Model
     }
 
     /**
+     * Todos los posts de las mascotas de este usuario
+     */
+    public function mascotasPosts()
+    {
+        return $this->hasManyThrough('App\Post', 'App\Mascota', "id_usuario", "id_mascota");
+    }
+
+    /**
      * @return string
      */
     public function getFotoPerfil(){
@@ -97,5 +105,21 @@ class Usuario extends Model
      */
     public function getMascotaById($id){
         return $this->mascotas()->where("id", $id)->first();
+    }
+
+    /**
+     * @return Post
+     */
+    public function getMascotasPosts(){
+        return $this->mascotasPosts()->orderBy("created_at","desc")->get();
+    }
+
+    public function getMascotaActiva(){
+        dd($request->session()->get('idMascotaActiva'));
+        return Mascota::find($request->session()->get('idMascotaActiva'));
+    }
+
+    public function hasThisMascotaId($id){
+        return $this->mascotas()->find($id);
     }
 }

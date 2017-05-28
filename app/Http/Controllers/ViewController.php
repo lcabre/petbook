@@ -37,6 +37,8 @@ class ViewController extends Controller
         if($fotoPerfil = $perfil->getFotoPerfil())
             array_push($variables, "fotoPerfil");
 
+        $postDeMascotas = $perfil->getMascotasPosts();
+        array_push($variables, "postDeMascotas");
         return view('wall', compact($variables));
     }
 
@@ -116,11 +118,58 @@ class ViewController extends Controller
         $razas = Raza::where("id_tipo_mascota",$mascota->getTipoMascota()->id)->get();
         array_push($variables, "razas");
 
-
         return view('editmascota', compact($variables));
     }
 
-    public function wallMascota($id){
+    public function wallMascota($id, Request $request){
+        $user = Auth::user();
+        $variables = array();
+
+        $perfil = $user->usuario()->first();
+
+        $mascota = Mascota::find($id);
+        array_push($variables, "mascota");
+
+        //if($perfil->mascotas()->find($id))
+        $request->session()->put('idMascotaActiva', $id);
+
+        $posts = $mascota->getPosts();
+        array_push($variables, "posts");
+
+        $mascotasParaSeguir = $mascota->getNoSeguidos(3);
+        array_push($variables, "mascotasParaSeguir");
+
+        return view('wallmascota', compact($variables));
+    }
+
+    public function seguidos($id){
+        $variables = array();
+
+        $mascota = Mascota::find($id);
+        array_push($variables, "mascota");
+
+        $mascotasParaSeguir = $mascota->getNoSeguidos(3);
+        array_push($variables, "mascotasParaSeguir");
+
+        $listaAmigos = $mascota->sigo()->get();
+        array_push($variables, "listaAmigos");
+
+        return view('seguidos', compact($variables));
+    }
+
+    public function aQuienSeguir($id){
+        $variables = array();
+        //dd($id);
+        $mascota = Mascota::find($id);
+        array_push($variables, "mascota");
+
+        $listaNoSeguidas = $mascota->getNoSeguidos();
+        array_push($variables, "listaNoSeguidas");
+
+        return view('aquienseguir', compact($variables));
+    }
+
+    public function wallSeguido($id){
         $variables = array();
 
         $mascota = Mascota::find($id);
@@ -129,10 +178,10 @@ class ViewController extends Controller
         $posts = $mascota->getPosts();
         array_push($variables, "posts");
 
-        //$mascotasParaSeguir = Mascota::take(3)->get();
-        $mascotasParaSeguir = $mascota->getNoSeguidos();
+        $mascotasParaSeguir = $mascota->getNoSeguidos(3);
         array_push($variables, "mascotasParaSeguir");
 
-        return view('wallmascota', compact($variables));
+        //dd($listaAmigos);
+        return view('wallseguido', compact($variables));
     }
 }

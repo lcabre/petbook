@@ -49,6 +49,7 @@
         <!--<h1>
             Publicaciones
         </h1>-->
+        @if($mascota->usuario()->first()->hasThisMascotaId(Session::get('idMascotaActiva')))
         <div class="post newpost">
             <div class="content">
                 <form action="{{ route("newPost") }}" method="post" class="post_form" enctype="multipart/form-data">
@@ -76,26 +77,72 @@
 
             </div>
         </div>
-        @foreach($posts as $post )
-        <div class="post">
-            <div class="avatar rounded-border">
-                @if($fotoPerfil = $post->getMascota()->getFotoPerfil())
-                    <img src="{{$fotoPerfil->getUrl()}}" alt="">
-                @endif
-            </div>
-            <div class="content">
-                <div>
-                    <div  class="name">{{ $post->getMascota()->nombre }}<div class="fecha">{{ $post->created_at->format("j m Y - H:i:s \h\s.") }}</div></div>
-
-                    <span>{{ $post->getMascota()->getRaza()->nombre }}</span>
+        @endif
+        @if($posts->isNotEmpty())
+            @foreach($posts as $post )
+                <div class="post">
+                    <div class="avatar rounded-border">
+                        @if($fotoPerfil = $post->getMascota()->getFotoPerfil())
+                            <img src="{{$fotoPerfil->getUrl()}}" alt="">
+                        @endif
+                    </div>
+                    <div class="content">
+                        <div>
+                            <div  class="name">{{ $post->getMascota()->nombre }}<div class="fecha">{{ $post->created_at->format("j m Y - H:i:s \h\s.") }}</div></div>
+                            <span>{{ $post->getMascota()->getRaza()->nombre }}</span>
+                        </div>
+                        @if($post->getFoto())
+                            <img src="{{ $post->getFoto()->getUrl() }}" alt="">
+                        @endif
+                        <p>{{ $post->descripcion }}</p>
+                        <div class="social">
+                            @if($post->isLikedBy(Session::get('idMascotaActiva')))
+                                <span class="megusta"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Me gusta</span>
+                            @else
+                                <form action="{{ route("meGusta") }}" method="POST">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="idmascota" value="{{ Session::get('idMascotaActiva')}}">
+                                    <input type="hidden" name="idpost" value="{{ $post->id }}">
+                                    <span class="nomegusta"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Me gusta</span>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="comentarios">
+                        @if($comentarios = $post->getComentarios())
+                            @foreach($comentarios as $comentario)
+                                <div class="comentario">
+                                    <div class="avatar rounded-border">
+                                        @if($fotoPerfil = $comentario->getFotoPerfil())
+                                            <img src="{{$fotoPerfil->getUrl()}}" alt="">
+                                        @endif
+                                    </div>
+                                    <div class="content">
+                                        <div class="name">{{ $comentario->nombre }}<div class="fecha">{{ $comentario->pivot->created_at->format("j m Y - H:i:s \h\s.") }}</div></div>
+                                        {{ $comentario->pivot->comentario }}
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                        <div class="content">
+                            <form action="{{ route("newComentario") }}" method="post" class="post_form" id="form-comentario" enctype="multipart/form-data">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="idmascota" value="{{ Session::get('idMascotaActiva')}}">
+                                <input type="hidden" name="idpost" value="{{ $post->id }}">
+                                <textarea name="comentario" class="form-control comentariotext" rows="1" placeholder="Escribe tu comentario" onkeyup="textAreaAdjust(this)"></textarea>
+                                <button type="submit" class="btn btn-primary small" id="newpost">Comentar</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <p>{{ $post->descripcion }}</p>
-                @if($post->getFoto())
-                    <img src="{{ $post->getFoto()->getUrl() }}" alt="">
-                @endif
+            @endforeach
+        @else
+            <div class="post">
+                <div class="content">
+                    <div class="alert alert-warning">No posee Comentarios Aun</div>
+                </div>
             </div>
-        </div>
-        @endforeach
+        @endif
     </div>
 @endsection
 
@@ -104,8 +151,10 @@
         <h1>A quien Seguir</h1>
         <div class="row">
         @foreach($mascotasParaSeguir as $mascotaParaSeguir)
-            <form action="">
-
+            <form action="{{ route("seguir") }}" method="post">
+                {{ csrf_field() }}
+                <input type="hidden" name="id_sigue" value="{{ $mascota->id }}">
+                <input type="hidden" name="id_seguida" value="{{ $mascotaParaSeguir->id }}">
                 <div class="seguir  col-xs-6 col-md-12 col-sm-12 col-lg-12">
                     <div class="avatar">
                         @if( $mascotaParaSeguir->getFotoPerfil())
@@ -125,7 +174,7 @@
                 </div>
             </form>
         @endforeach
-            <div class="seguir col-xs-6 col-md-12 col-sm-12 col-lg-12"><a href="#">ver todos</a></div>
+            <div class="seguir col-xs-6 col-md-12 col-sm-12 col-lg-12"><a href="{{ route("view.aquienseguir", $mascota->id) }}">ver todos</a></div>
         </div>
     </div>
 @endsection
@@ -180,6 +229,9 @@
             <ul>
                 <a href="{{ route("view.editMascota", $mascota->id) }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Editar informaciónn</li></a>
             </ul>
+            <ul>
+                <a href="{{ route("view.seguidos", $mascota->id) }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Seguidos</li></a>
+            </ul>
         </div>
     </div>
 @endsection
@@ -187,35 +239,9 @@
 @section("javascript")
     <script>
         $(document).ready(function(){
-            /*$("#newpost").click(function (e) {
-                e.preventDefault();
-                console.log("entre");
-                var formData = new FormData($(".post_form")[0]);
-                var other_data = $(".post_form").serializeArray();
-                $.each(other_data,function(key,input){
-                    formData.append(input.name,input.value);
-                });
-                //formData.append("post_mensaje",$("input[type='textarea']").serialize());
-                console.log(formData);
-                $.ajax({
-                    url: "{{ route("newPost") }}",
-                    type: "POST",
-                    data: formData,
-                    async: false,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: function (data) {
-                        console.log(data);
-
-                    },
-                    error: function (data) {
-                        console.log(data)
-                    }
-                });
-
-            });*/
-
+            $(".nomegusta").click(function () {
+               $(this).parent().submit();
+            });
             $(".fa-chevron-down").click(function(){
                 console.log("dasasd");
                 if($(".userpanel").is(":visible"))

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property integer $id
@@ -51,9 +52,25 @@ class Mascota extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function seguidos()
+    public function sigo()
     {
         return $this->belongsToMany('App\Mascota', 'sigue', 'id_mascota', 'id_mascota2')->withTimestamps();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function likes()
+    {
+        return $this->belongsToMany('App\Post', 'likes', 'id_mascota', 'id_post')->withTimestamps();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function comentarios()
+    {
+        return $this->belongsToMany('App\Post', 'comentario', 'id_mascota', 'id_post')->withTimestamps()->withPivot('id','comentario');
     }
 
     /**
@@ -121,11 +138,38 @@ class Mascota extends Model
     /**
      * @return false|Mascota
      */
-    public function getNoSeguidos(){
-        $noSeguidos = Mascota::whereHas( 'usuario', function($sQuery){
-            $sQuery->where('id_usuario', '!=', $this->usuario()->first()->id );
-        })->orderBy("updated_at", "desc")->limit(3)->get();
+    public function getNoPropias(){
+        $result = Mascota::where("id_usuario","!=", $this->usuario()->first()->id)
+            ->orderBy("updated_at", "desc")
+            ->limit(3)
+            ->get();
+        return $result;
+    }
 
-        return $noSeguidos;
+    /**
+     * @param int $limit
+     * @return Mascota|false
+     */
+    public function getNoSeguidos($limit = null){
+        $result = Mascota::where("id_usuario","!=", $this->usuario()->first()->id)
+            ->whereNotIn("id",
+                function ($query) {
+                    $query->select(DB::raw("id_mascota2"))
+                        ->from('sigue')
+                        ->where("id_mascota","=", $this->id);
+                }
+            )
+            ->orderBy("updated_at", "desc");
+        if($limit)
+           $result = $result->limit($limit);
+
+        return $result->get();
+    }
+
+    /**
+     * @param Mascota $mascota
+     */
+    public function seguir(Mascota $mascota){
+        $this->sigo()->attach($mascota);
     }
 }
