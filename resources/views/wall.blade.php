@@ -11,12 +11,12 @@
             @if(isset($avatar))
                 <img src="{{$avatar}}" alt="">
             @else
-                <img src="/img/defaul_perfil_img.jpg" alt="">
+                <img src="/img/defaul_human_perfil_img.jpg" alt="">
             @endif
         </div>
         <div class="nombre">
-            @if($perfil->mascotas()->first())
-                {{ $perfil->mascotas()->first()->nombre }}
+            @if($perfil->nombre)
+                {{ $perfil->nombre }}
             @else
                 <br>
             @endif
@@ -24,18 +24,8 @@
         </div>
         <div class="numeros">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <div class="tittle">Siguiendo
-                    <div class="total">55</div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-               <div class="tittle">Seguidores
-                   <div class="total">55</div>
-               </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <div class="tittle">Posts
-                    <div class="total">55</div>
+                <div class="tittle">Mascotas
+                    <div class="total">{{$perfil->mascotas()->count()}}</div>
                 </div>
             </div>
         </div>
@@ -52,11 +42,21 @@
                     <div class="avatar rounded-border">
                         @if($fotoPerfil = $post->getMascota()->getFotoPerfil())
                             <img src="{{$fotoPerfil->getUrl()}}" alt="">
+                        @else
+                            <img src="/img/defaul_perfil_img.jpg" alt="">
                         @endif
                     </div>
                     <div class="content">
                         <div>
-                            <div  class="name">{{ $post->getMascota()->nombre }}<div class="fecha">{{ $post->created_at->format("j m Y - H:i:s \h\s.") }}</div></div>
+                            <div  class="name">
+                                @if($perfil->mascotas->find($post->getMascota()->id))
+                                    <a href="{{ route("wallMascota", $post->getMascota()->id) }}">
+                                @else
+                                    <a href="{{ route("view.wallseguido", $post->getMascota()->id) }}">
+                                @endif
+                                {{ $post->getMascota()->nombre }}</a>
+                                <div class="fecha">{{ $post->created_at->format("j m Y - H:i:s \h\s.") }}</div>
+                            </div>
                             <span>{{ $post->getMascota()->getRaza()->nombre }}</span>
                         </div>
                         @if($post->getFoto())
@@ -71,10 +71,20 @@
                                     <div class="avatar rounded-border">
                                         @if($fotoPerfil = $comentario->getFotoPerfil())
                                             <img src="{{$fotoPerfil->getUrl()}}" alt="">
+                                        @else
+                                            <img src="/img/defaul_perfil_img.jpg" alt="">
                                         @endif
                                     </div>
                                     <div class="content">
-                                        <div class="name">{{ $comentario->nombre }}<div class="fecha">{{ $comentario->pivot->created_at->format("j m Y - H:i:s \h\s.") }}</div></div>
+                                        <div class="name">
+                                            @if($perfil->mascotas->find($comentario->id))
+                                                <a href="{{ route("wallMascota", $comentario->id) }}">
+                                            @else
+                                                <a href="{{ route("view.wallseguido", $comentario->id) }}">
+                                            @endif
+                                            {{ $comentario->nombre }}</a>
+                                            <div class="fecha">{{ $comentario->pivot->created_at->format("j m Y - H:i:s \h\s.") }}</div>
+                                        </div>
                                         {{ $comentario->pivot->comentario }}
                                     </div>
                                 </div>

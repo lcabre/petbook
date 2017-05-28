@@ -12,7 +12,7 @@
             @if(isset($avatar))
                 <img src="{{$avatar}}" alt="">
             @else
-                <img src="/img/defaul_perfil_img.jpg" alt="">
+                <img src="/img/defaul_human_perfil_img.jpg" alt="">
             @endif
         </div>
         <div class="nombre">
@@ -24,18 +24,8 @@
         </div>
         <div class="numeros">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <div class="tittle">Siguiendo
-                    <div class="total">55</div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-               <div class="tittle">Seguidores
-                   <div class="total">55</div>
-               </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <div class="tittle">Posts
-                    <div class="total">55</div>
+                <div class="tittle">Mascotas
+                    <div class="total">{{$perfil->mascotas()->count()}}</div>
                 </div>
             </div>
         </div>

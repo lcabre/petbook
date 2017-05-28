@@ -68,7 +68,7 @@
                         <div class="content">
                             <div class="descripcion">
                                 <div class="name">
-                                    {{ $mascotaNoSeguida->nombre }}
+                                    <a href="{{ route("view.wallseguido", $mascotaNoSeguida->id) }}"> {{ $mascotaNoSeguida->nombre }}</a>
                                 </div>
                                 <div class="tipo">
                                     {{ $mascotaNoSeguida->otras_caracteristicas }}

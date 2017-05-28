@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Mascota;
 use App\Raza;
 use App\TipoMascota;
+use App\Post;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class ViewController extends Controller
 {
@@ -68,11 +70,14 @@ class ViewController extends Controller
         $variables = array();
 
         $perfil = $user->getPerfil();
+        array_push($variables, "perfil");
+
         if($fotoPerfil = $perfil->getFotoPerfil())
             array_push($variables, "fotoPerfil");
 
         $razas = Raza::all();
         array_push($variables, "razas");
+
         $tipos = TipoMascota::all();
         array_push($variables, "tipos");
         return view('agregarMascotas', compact($variables));
@@ -124,16 +129,17 @@ class ViewController extends Controller
     public function wallMascota($id, Request $request){
         $user = Auth::user();
         $variables = array();
+        $request->session()->put('idMascotaActiva', $id);
 
         $perfil = $user->usuario()->first();
+        array_push($variables, "perfil");
 
         $mascota = Mascota::find($id);
         array_push($variables, "mascota");
 
-        //if($perfil->mascotas()->find($id))
-        $request->session()->put('idMascotaActiva', $id);
-
-        $posts = $mascota->getPosts();
+        $misPosts = $mascota->getPosts();
+        $misSeguidosPosts = $mascota->getPostsDeMascotasSeguidas();
+        $posts =  $misPosts->merge($misSeguidosPosts)->sortByDesc('updated_at');
         array_push($variables, "posts");
 
         $mascotasParaSeguir = $mascota->getNoSeguidos(3);
@@ -175,10 +181,16 @@ class ViewController extends Controller
         $mascota = Mascota::find($id);
         array_push($variables, "mascota");
 
+        $miMascota = Mascota::find(Session::get('idMascotaActiva'));
+        array_push($variables, "miMascota");
+
+        $miPerfil = Mascota::find(Session::get('idMascotaActiva'))->usuario()->first();
+        array_push($variables, "miPerfil");
+
         $posts = $mascota->getPosts();
         array_push($variables, "posts");
 
-        $mascotasParaSeguir = $mascota->getNoSeguidos(3);
+        $mascotasParaSeguir = $miMascota->getNoSeguidos(3);
         array_push($variables, "mascotasParaSeguir");
 
         //dd($listaAmigos);

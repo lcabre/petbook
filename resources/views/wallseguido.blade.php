@@ -1,12 +1,10 @@
-@extends('layouts.MasterWallMascota')
+@extends('layouts.MasterWallSeguido')
 
 @section("perfil")
-    <div class="perfil rounded-border ">
+    <div class="perfilwall rounded-border ">
         <div class="imgperfil">
             @if( $mascota->getFotoPerfil())
                 <img src="{{ $mascota->getFotoPerfil()->getUrl() }}" alt="">
-            @else
-                <img src="/img/defaul_perfil_img_mascota.jpg" alt="">
             @endif
         </div>
         <div class="avatar rounded-border">
@@ -27,20 +25,30 @@
         <div class="numeros">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                 <div class="tittle">Siguiendo
-                    <div class="total">55</div>
+                    <div class="total">{{$mascota->sigo()->count()}}</div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                <div class="tittle">Seguidores
-                   <div class="total">55</div>
+                   <div class="total">{{$mascota->seguidores()->count()}}</div>
                </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                 <div class="tittle">Posts
-                    <div class="total">55</div>
+                    <div class="total">{{$mascota->posts()->count()}}</div>
                 </div>
             </div>
         </div>
+        @if($miMascota->sigo->find($mascota->id))
+            <button type="button" class="btn btn-primary siguiendo">Siguiendo</button>
+        @else
+            <form action="{{ route("seguir") }}" method="post">
+                {{ csrf_field() }}
+                <input type="hidden" name="id_sigue" value="{{ $miMascota->id }}">
+                <input type="hidden" name="id_seguida" value="{{ $mascota->id }}">
+                <button type="submit" class="btn btn-primary ">Seguir</button>
+            </form>
+        @endif
     </div>
 @endsection
 <?php /** @var App\Post $post */ ?>
@@ -49,18 +57,27 @@
         <!--<h1>
             Publicaciones
         </h1>-->
-
         @if($posts->isNotEmpty())
             @foreach($posts as $post )
                 <div class="post">
                     <div class="avatar rounded-border">
                         @if($fotoPerfil = $post->getMascota()->getFotoPerfil())
                             <img src="{{$fotoPerfil->getUrl()}}" alt="">
+                        @else
+                            <img src="/img/defaul_perfil_img.jpg" alt="">
                         @endif
                     </div>
                     <div class="content">
                         <div>
-                            <div  class="name">{{ $post->getMascota()->nombre }}<div class="fecha">{{ $post->created_at->format("j m Y - H:i:s \h\s.") }}</div></div>
+                            <div  class="name">
+                                @if($miPerfil->mascotas->find($post->getMascota()->id))
+                                    <a href="{{ route("wallMascota", $post->getMascota()->id) }}">
+                                @else
+                                    <a href="{{ route("view.wallseguido", $post->getMascota()->id) }}">
+                                @endif
+                                {{ $post->getMascota()->nombre }}</a>
+                                <div class="fecha">{{ $post->created_at->format("j m Y - H:i:s \h\s.") }}</div>
+                            </div>
                             <span>{{ $post->getMascota()->getRaza()->nombre }}</span>
                         </div>
                         @if($post->getFoto())
@@ -68,12 +85,12 @@
                         @endif
                         <p>{{ $post->descripcion }}</p>
                         <div class="social">
-                            @if($post->isLikedBy(Session::get('idMascotaActiva')))
+                            @if($post->isLikedBy($miMascota->id))
                                 <span class="megusta"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Me gusta</span>
                             @else
                                 <form action="{{ route("meGusta") }}" method="POST">
                                     {{ csrf_field() }}
-                                    <input type="hidden" name="idmascota" value="{{ Session::get('idMascotaActiva')}}">
+                                    <input type="hidden" name="idmascota" value="{{ $miMascota->id }}">
                                     <input type="hidden" name="idpost" value="{{ $post->id }}">
                                     <span class="nomegusta"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Me gusta</span>
                                 </form>
@@ -87,10 +104,20 @@
                                     <div class="avatar rounded-border">
                                         @if($fotoPerfil = $comentario->getFotoPerfil())
                                             <img src="{{$fotoPerfil->getUrl()}}" alt="">
+                                        @else
+                                            <img src="/img/defaul_perfil_img.jpg" alt="">
                                         @endif
                                     </div>
                                     <div class="content">
-                                        <div class="name">{{ $comentario->nombre }}<div class="fecha">{{ $comentario->pivot->created_at->format("j m Y - H:i:s \h\s.") }}</div></div>
+                                        <div class="name">
+                                            @if($miPerfil->mascotas->find($comentario->id))
+                                                <a href="{{ route("wallMascota", $comentario->id) }}">
+                                            @else
+                                                <a href="{{ route("view.wallseguido", $comentario->id) }}">
+                                            @endif
+                                            {{ $comentario->nombre }}</a>
+                                            <div class="fecha">{{ $comentario->pivot->created_at->format("j m Y - H:i:s \h\s.") }}</div>
+                                        </div>
                                         {{ $comentario->pivot->comentario }}
                                     </div>
                                 </div>
@@ -99,7 +126,7 @@
                         <div class="content">
                             <form action="{{ route("newComentario") }}" method="post" class="post_form" id="form-comentario" enctype="multipart/form-data">
                                 {{ csrf_field() }}
-                                <input type="hidden" name="idmascota" value="{{ Session::get('idMascotaActiva')}}">
+                                <input type="hidden" name="idmascota" value="{{ $miMascota->id }}">
                                 <input type="hidden" name="idpost" value="{{ $post->id }}">
                                 <textarea name="comentario" class="form-control comentariotext" rows="1" placeholder="Escribe tu comentario" onkeyup="textAreaAdjust(this)"></textarea>
                                 <button type="submit" class="btn btn-primary small" id="newpost">Comentar</button>
@@ -146,7 +173,7 @@
                 </div>
             </form>
         @endforeach
-            <div class="seguir col-xs-6 col-md-12 col-sm-12 col-lg-12"><a href="{{ route("view.aquienseguir", $mascota->id) }}">ver todos</a></div>
+            <div class="seguir col-xs-6 col-md-12 col-sm-12 col-lg-12"><a href="{{ route("view.aquienseguir", $miMascota->id) }}">ver todos</a></div>
         </div>
     </div>
 @endsection
@@ -199,10 +226,7 @@
         <h1>Menú</h1>
         <div class="lista">
             <ul>
-                <a href="{{ route("view.editMascota", $mascota->id) }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Editar informaciónn</li></a>
-            </ul>
-            <ul>
-                <a href="{{ route("view.seguidos", $mascota->id) }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Seguidos</li></a>
+                <a href="{{ route("view.seguidos",$miMascota->id) }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Seguidos</li></a>
             </ul>
         </div>
     </div>

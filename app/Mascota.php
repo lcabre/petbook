@@ -166,6 +166,19 @@ class Mascota extends Model
         return $result->get();
     }
 
+    public function getPostsDeMascotasSeguidas(){
+        $result = Post::whereIn("id_mascota",
+            function ($query) {
+                $query->select(DB::raw("id_mascota2"))
+                    ->from('sigue')
+                    ->where("id_mascota","=", $this->id);
+            }
+        )
+            ->orderBy("updated_at", "desc");
+
+        return $result->get();
+    }
+
     /**
      * @param Mascota $mascota
      */

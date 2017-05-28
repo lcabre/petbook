@@ -26,17 +26,17 @@
         <div class="numeros">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                 <div class="tittle">Siguiendo
-                    <div class="total">55</div>
+                    <div class="total">{{$mascota->sigo()->count()}}</div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-               <div class="tittle">Seguidores
-                   <div class="total">55</div>
-               </div>
+                <div class="tittle">Seguidores
+                    <div class="total">{{$mascota->seguidores()->count()}}</div>
+                </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                 <div class="tittle">Posts
-                    <div class="total">55</div>
+                    <div class="total">{{$mascota->posts()->count()}}</div>
                 </div>
             </div>
         </div>

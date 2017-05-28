@@ -100,7 +100,7 @@ header .userpanel{
     padding-right: 7px!important;
 }
 
-.publicaciones, .perfil, .ranking, .generalbox{
+.publicaciones, .perfil, .perfilwall, .ranking, .generalbox{
     background-color: #FFFFFF;
 }
 .publicaciones:not(:first-child){
@@ -110,10 +110,34 @@ header .userpanel{
     display: block;
     width: auto;
 }
-.perfil{
+.perfil, .perfilwall{
     position: relative;
     padding-bottom: 5px;
     margin-bottom: 5px;
+}
+.perfilwall{
+    margin-top: 7px;
+}
+.perfilwall button {
+    margin-top: 6px;
+    background-color: white;
+    border-color: #2a88bd;
+    color: #2a88bd;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
+
+.perfilwall button.siguiendo {
+    background-color: #2a88bd;
+    border-color: #2a88bd;
+    color: #FFF;
+}
+
+.perfilwall .imgperfil{
+    height: 400px;
+    background-color: #2a88bd;
+    border-radius: 3px 3px 0 0;
 }
 .perfil .imgperfil{
     height: 135px;
@@ -140,6 +164,16 @@ header .userpanel{
     background-color: #2ab27b;
     border: 1px solid #ffffff;
 }
+
+.perfilwall .avatar{
+    position: absolute;
+    left: 10px;
+    top: 360px;
+    height: 60px;
+    width: 60px;
+    background-color: #2ab27b;
+    border: 1px solid #ffffff;
+}
 .avatar{
     overflow: hidden;
     position: relative;
@@ -157,20 +191,20 @@ header .userpanel{
     font-weight: 600;
     font-size: 16px;
 }
-.perfil .nombre{
+.perfil .nombre, .perfilwall .nombre{
     left: 50px;
     top: 60px;
     padding-left: 75px;
 }
-.perfil .tittle{
+.perfil .tittle, .perfilwall .tittle{
     text-transform: uppercase;
     font-size: 13px;
 }
-.perfil .numeros{
+.perfil .numeros, .perfilwall .numeros{
     display: inline-block;
 }
 
-.perfil .tittle .total{
+.perfil .tittle .total, .perfilwall .tittle .total{
     color: #29ABE2;
     font-size: 22px;
     font-weight: 600;
@@ -201,6 +235,10 @@ header .userpanel{
     font-size: 16px;
     font-weight: 600;
     margin-top: 2px;
+}
+.name a{
+    float: none!important;
+    color: inherit;
 }
 .name .fecha{
     float: right;
@@ -274,6 +312,7 @@ header .userpanel{
     margin-top: 10px;
 }
 .generalbox .dato{
+    font-family: 'Quicksand', sans-serif;
     width: 100%;
     border-bottom: dashed 1px #ccc;
 }
@@ -504,12 +543,24 @@ box ul a{
     .notificaciones p{
         display: none;
     }
+    .perfilwall .imgperfil{
+        height: 250px;
+    }
+    .perfilwall .avatar{
+        top: 210px;
+    }
 }
 
 @media (max-width: 550px) {
     .mainhome h2 {
         font-family: Bebas-Neue-Light;
         font-size: 45px;
+    }
+    .perfilwall .imgperfil{
+        height: 135px;
+    }
+    .perfilwall .avatar{
+        top: 95px;
     }
 }
 

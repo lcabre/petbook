@@ -27,17 +27,17 @@
         <div class="numeros">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                 <div class="tittle">Siguiendo
-                    <div class="total">55</div>
+                    <div class="total">{{$mascota->sigo()->count()}}</div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-               <div class="tittle">Seguidores
-                   <div class="total">55</div>
-               </div>
+                <div class="tittle">Seguidores
+                    <div class="total">{{$mascota->seguidores()->count()}}</div>
+                </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                 <div class="tittle">Posts
-                    <div class="total">55</div>
+                    <div class="total">{{$mascota->posts()->count()}}</div>
                 </div>
             </div>
         </div>
@@ -49,7 +49,6 @@
         <!--<h1>
             Publicaciones
         </h1>-->
-        @if($mascota->usuario()->first()->hasThisMascotaId(Session::get('idMascotaActiva')))
         <div class="post newpost">
             <div class="content">
                 <form action="{{ route("newPost") }}" method="post" class="post_form" enctype="multipart/form-data">
@@ -77,18 +76,27 @@
 
             </div>
         </div>
-        @endif
         @if($posts->isNotEmpty())
             @foreach($posts as $post )
                 <div class="post">
                     <div class="avatar rounded-border">
                         @if($fotoPerfil = $post->getMascota()->getFotoPerfil())
                             <img src="{{$fotoPerfil->getUrl()}}" alt="">
+                        @else
+                            <img src="/img/defaul_perfil_img.jpg" alt="">
                         @endif
                     </div>
                     <div class="content">
                         <div>
-                            <div  class="name">{{ $post->getMascota()->nombre }}<div class="fecha">{{ $post->created_at->format("j m Y - H:i:s \h\s.") }}</div></div>
+                            <div  class="name">
+                                @if($perfil->mascotas->find($post->getMascota()->id))
+                                    <a href="{{ route("wallMascota", $post->getMascota()->id) }}">
+                                @else
+                                    <a href="{{ route("view.wallseguido", $post->getMascota()->id) }}">
+                                @endif
+                                {{ $post->getMascota()->nombre }}</a>
+                                <div class="fecha">{{ $post->created_at->format("j m Y - H:i:s \h\s.") }}</div>
+                            </div>
                             <span>{{ $post->getMascota()->getRaza()->nombre }}</span>
                         </div>
                         @if($post->getFoto())
@@ -96,12 +104,12 @@
                         @endif
                         <p>{{ $post->descripcion }}</p>
                         <div class="social">
-                            @if($post->isLikedBy(Session::get('idMascotaActiva')))
+                            @if($post->isLikedBy($mascota->id))
                                 <span class="megusta"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Me gusta</span>
                             @else
                                 <form action="{{ route("meGusta") }}" method="POST">
                                     {{ csrf_field() }}
-                                    <input type="hidden" name="idmascota" value="{{ Session::get('idMascotaActiva')}}">
+                                    <input type="hidden" name="idmascota" value="{{ $mascota->id }}">
                                     <input type="hidden" name="idpost" value="{{ $post->id }}">
                                     <span class="nomegusta"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Me gusta</span>
                                 </form>
@@ -115,10 +123,20 @@
                                     <div class="avatar rounded-border">
                                         @if($fotoPerfil = $comentario->getFotoPerfil())
                                             <img src="{{$fotoPerfil->getUrl()}}" alt="">
+                                        @else
+                                            <img src="/img/defaul_perfil_img.jpg" alt="">
                                         @endif
                                     </div>
                                     <div class="content">
-                                        <div class="name">{{ $comentario->nombre }}<div class="fecha">{{ $comentario->pivot->created_at->format("j m Y - H:i:s \h\s.") }}</div></div>
+                                        <div class="name">
+                                            @if($perfil->mascotas->find($comentario->id))
+                                                <a href="{{ route("wallMascota", $comentario->id) }}">
+                                            @else
+                                                <a href="{{ route("view.wallseguido", $comentario->id) }}">
+                                            @endif
+                                                {{ $comentario->nombre }}</a>
+                                            <div class="fecha">{{ $comentario->pivot->created_at->format("j m Y - H:i:s \h\s.") }}</div>
+                                        </div>
                                         {{ $comentario->pivot->comentario }}
                                     </div>
                                 </div>
@@ -127,7 +145,7 @@
                         <div class="content">
                             <form action="{{ route("newComentario") }}" method="post" class="post_form" id="form-comentario" enctype="multipart/form-data">
                                 {{ csrf_field() }}
-                                <input type="hidden" name="idmascota" value="{{ Session::get('idMascotaActiva')}}">
+                                <input type="hidden" name="idmascota" value="{{ $mascota->id }}">
                                 <input type="hidden" name="idpost" value="{{ $post->id }}">
                                 <textarea name="comentario" class="form-control comentariotext" rows="1" placeholder="Escribe tu comentario" onkeyup="textAreaAdjust(this)"></textarea>
                                 <button type="submit" class="btn btn-primary small" id="newpost">Comentar</button>
