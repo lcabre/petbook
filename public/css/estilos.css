@@ -393,6 +393,12 @@ box ul a{
     display: inline-block;
     margin-top: 10px;
     width: 100%;
+    position: relative;
+}
+.anuncio button{
+    position: absolute;
+    right: 0;
+    bottom:0;
 }
 .seguir button{
     margin-top: 6px;
@@ -414,6 +420,18 @@ box ul a{
 }
 .box .content .tipo{
     margin-top: -5px;
+}
+.box .content .tipo{
+    color: crimson;
+}
+.success{
+    text-align: right;
+}
+.success button {
+    margin-top: 10px;
+}
+.pedircita{
+    right: 110px!important;
 }
 .box .avatar{
     height: 55px;
@@ -525,6 +543,11 @@ box ul a{
     width: 100%;
 }
 .mascota button{
+    position: absolute;
+    right: 15px;
+    bottom: 0;
+}
+.mascota .botones{
     position: absolute;
     right: 15px;
     bottom: 0;

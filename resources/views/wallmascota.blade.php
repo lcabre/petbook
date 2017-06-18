@@ -1,12 +1,17 @@
 @extends('layouts.MasterWallMascota')
 
 @section("perfil")
+    @if(Session('idMascotaActiva'))
+        <!--<div class="alert alert-danger">
+            {{--Session('idMascotaActiva')--}}
+                </div>-->
+    @endif
     <div class="perfil rounded-border ">
         <div class="imgperfil">
             @if( $mascota->getFotoPerfil())
                 <img src="{{ $mascota->getFotoPerfil()->getUrl() }}" alt="">
             @else
-                <img src="/img/defaul_perfil_img_mascota.jpg" alt="">
+            <!--<img src="/img/defaul_perfil_img_mascota.jpg" alt="">-->
             @endif
         </div>
         <div class="avatar rounded-border">
@@ -45,6 +50,12 @@
 @endsection
 <?php /** @var App\Post $post */ ?>
 @section("content")
+    @if(session()->has('message'))
+        <div class="alert alert-success">
+            {{ session()->get('message') }}
+            <div class="success"><button type="button" class="btn btn-default small" id="success">Aceptar</button></div>
+        </div>
+    @endif
     <div class="publicaciones rounded-border ">
         <!--<h1>
             Publicaciones
@@ -183,7 +194,7 @@
                     </div>
                     <div class="content">
                         <div class="name">
-                            {{ $mascotaParaSeguir->nombre }}
+                            <a href="{{ route("view.wallseguido", $mascotaParaSeguir->id) }}">{{ $mascotaParaSeguir->nombre }}</a>
                         </div>
                         <div class="tipo">
                             <button type="submit" class="btn btn-primary btn-xs">Seguir</button>
@@ -199,35 +210,97 @@
 
 @section("anuncios")
     <div class="box rounded-border ">
+        <h1>Notificaciones</h1>
+        @if($citas = $mascota->getNotificaciones("citaconcretada"))
+            @foreach($citas as $cita)
+                <form action="{{ route("citaInformada") }}" method="post">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="idcita" value="{{ $mascota->id }}">
+                    <input type="hidden" name="idcitada" value="{{ $cita->id }}">
+                    <div class="anuncio">
+                        <div class="avatar">
+                            @if( $cita->getFotoPerfil())
+                                <img src="{{ $cita->getFotoPerfil()->getUrl() }}" alt="">
+                            @else
+                                <img src="/img/defaul_perfil_img.jpg" alt="">
+                            @endif
+                        </div>
+                        <div class="content">
+                            <div class="name">
+                                <a href="{{ route("view.wallseguido", $cita->id) }}"> {{ $cita->nombre }}</a>
+                            </div>
+                            <div class="tipo">
+                                <span>Acepto tu cita!</span>
+                        </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-xs">Aceptar</button>
+                    </div>
+                </form>
+            @endforeach
+        @elseif($citas = $mascota->getNotificaciones("nuevacita"))
+            @foreach($citas as $cita)
+                <form action="{{ route("aceptarCita") }}" method="post">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="idcita" value="{{ $cita->id }}">
+                    <input type="hidden" name="idcitada" value="{{ $mascota->id }}">
+                    <div class="anuncio">
+                        <div class="avatar">
+                            @if( $cita->getFotoPerfil())
+                                <img src="{{ $cita->getFotoPerfil()->getUrl() }}" alt="">
+                            @else
+                                <img src="/img/defaul_perfil_img.jpg" alt="">
+                            @endif
+                        </div>
+                        <div class="content">
+                            <div class="name">
+                                <a href="{{ route("view.wallseguido", $cita->id) }}"> {{ $cita->nombre }}</a>
+                            </div>
+                            <div class="tipo">
+                                <span>Te ha citado!</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-xs">Aceptar</button>
+                    </div>
+                </form>
+            @endforeach
+            @else
+            <span>No posee anuncios</span>
+        @endif
+    </div>
+    <div class="box rounded-border ">
         <h1>Anuncios</h1>
-        <div class="anuncio">
-            <div class="avatar">
-
-            </div>
-            <div class="content">
-                <div class="name">
-                    Bingo
-                </div>
-                <div class="tipo">
-                    Buscando cita
-                </div>
-            </div>
-        </div>
-        <div class="anuncio">
-            <div class="avatar">
-
-            </div>
-            <div class="content">
-                <div class="name">
-                    Pepe
-                </div>
-                <div class="tipo">
-                    Buscando cita
-                </div>
-            </div>
-        </div>
+        @if($aptocitas = $mascota->getAptoCitas())
+            @foreach($aptocitas as $aptocita)
+                <form action="{{ route("cita") }}" method="post">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="idcita" value="{{ $mascota->id }}">
+                    <input type="hidden" name="idcitada" value="{{ $aptocita->mascota()->first()->id }}">
+                    <div class="anuncio">
+                        <div class="avatar">
+                            @if( $aptocita->mascota()->first()->getFotoPerfil())
+                                <img src="{{ $aptocita->mascota()->first()->getFotoPerfil()->getUrl() }}" alt="">
+                            @else
+                                <img src="/img/defaul_perfil_img.jpg" alt="">
+                            @endif
+                        </div>
+                        <div class="content">
+                            <div class="name">
+                                <a href="{{ route("view.wallseguido", $aptocita->mascota()->first()->id) }}"> {{ $aptocita->mascota()->first()->nombre }}</a>
+                            </div>
+                            <div class="tipo">
+                                <span>Busca Cita</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-xs">Citar</button>
+                    </div>
+                </form>
+            @endforeach
+        @else
+            <span>No posee anuncios</span>
+        @endif
     </div>
 @endsection
+
 @section("ranking")
     <div class="box rounded-border ">
         <div class="imgperfil">
@@ -245,7 +318,13 @@
         <h1>Menú</h1>
         <div class="lista">
             <ul>
-                <a href="{{ route("view.editMascota", $mascota->id) }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Editar informaciónn</li></a>
+                <a href="{{ route("home") }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Wall Dueño</li></a>
+            </ul>
+            <ul>
+                <a href="{{ route("mascotas") }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Mascotas</li></a>
+            </ul>
+            <ul>
+                <a href="{{ route("view.editMascota", $mascota->id) }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Editar información</li></a>
             </ul>
             <ul>
                 <a href="{{ route("view.seguidos", $mascota->id) }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Seguidos</li></a>
@@ -259,6 +338,9 @@
         $(document).ready(function(){
             $(".nomegusta").click(function () {
                $(this).parent().submit();
+            });
+            $("#success").click(function () {
+               console.log($(this).parent().parent().fadeOut());
             });
             $(".fa-chevron-down").click(function(){
                 console.log("dasasd");

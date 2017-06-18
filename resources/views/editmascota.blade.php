@@ -6,7 +6,7 @@
             @if( $mascota->getFotoPerfil())
                 <img src="{{ $mascota->getFotoPerfil()->getUrl() }}" alt="">
             @else
-                <img src="/img/defaul_perfil_img_mascota.jpg" alt="">
+                <!--<img src="/img/defaul_perfil_img_mascota.jpg" alt="">-->
             @endif
         </div>
         <div class="avatar rounded-border">
@@ -49,6 +49,7 @@
         <div class="lista">
             <ul>
                 <a href="#"><li><span><i class="fa fa-bell" aria-hidden="true"></i></span>Notificaciones<span class="badge">12</span></li></a>
+                <a href="{{route("wallMascota", $mascota->id)}}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Wall</li></a>
                 <li class="active"><span><i class="fa fa-user" aria-hidden="true"></i></span>Mis Datos</li>
                 <a href="{{route("mascotas")}}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Mis Mascotas</li></a>
             </ul>
@@ -60,7 +61,7 @@
 @section("content")
     <div class="generalbox rounded-border ">
         <h1>
-            Datos de Usuario
+            Datos de Mascota
         </h1>
         <div class="content mascotas">
             <form action="{{ route("editMascota") }}" method="post">
@@ -170,6 +171,58 @@
                         <button class="btn  btn-default" id="saveimage">Guardar</button>
                     </div>
                 </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="generalbox rounded-border">
+        <h1>Citas</h1>
+        <div class="content">
+            <form action="{{ route("setAptoCita") }}" name="form" method="post" class="perfil_form">
+                <input type="hidden" name="id" value="{{ $mascota->id }}">
+                {{ csrf_field() }}
+                <label>Seleccione con que raza quiere cruzar esta mascota</label>
+                <div class="form-group">
+                    <label>Clase</label>
+                    <select name="clase" class="form-control" id="clase2">
+                        <option value="">Seleccione una Clase</option>
+                        @foreach($tipos as $clase)
+                            @if($mascota->aptoCita())
+                                <option value="{{$clase->id}}" {{ ($mascota->aptoCita()->raza()->first()->getTipo()->id == $clase->id ? "selected":($mascota->getTipoMascota()->id == $clase->id?"selected":"")) }}>{{$clase->nombre}}</option>
+                            @else
+                                <option value="{{$clase->id}}" {{ ($mascota->getTipoMascota()->id == $clase->id?"selected":"") }}>{{$clase->nombre}}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group {{ ($errors->has('raza2'))?"has-error":"" }}">
+                    <label>Raza</label>
+                    <select name="raza" class="form-control" id="raza2">
+                        <option value="">Seleccione una Raza</option>
+                        @foreach($razas as $raza)
+                            @if($mascota->aptoCita())
+                                <option value="{{$raza->id}}" {{ ($mascota->aptoCita()->id_raza == $raza->id ? "selected":"") }}>{{$raza->nombre}}</option>
+                            @else
+                                <option value="{{$raza->id}}" {{ ($mascota->getRaza()->id == $raza->id?"selected":"") }}>{{$raza->nombre}}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group {{ ($errors->has('apto_cita'))?"has-error":"" }}">
+                    <label>Apto Cita</label>
+                    <div class="radio">
+                        <label class="control-label">
+                            <input type="radio" name="apto_cita" value="si" {{ old("apto_cita") == "si" ? "checked":($mascota->aptoCita()?"checked":"") }}>Si
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label class="control-label">
+                            <input type="radio" name="apto_cita" value="no" {{ old("apto_cita") == "no" ? "checked":(!$mascota->aptoCita()?"checked":"") }}>No
+                        </label>
+                    </div>
+                </div>
+                <button class="btn  btn-default" id="saveimage">Guardar</button>
             </form>
         </div>
     </div>
@@ -292,6 +345,30 @@
 
                         $('#raza').append(opciones);
                         $("#raza").prop('disabled', false);
+                    },
+                    error: function (data) {
+                        console.log(data)
+                    }
+                });
+
+            });
+
+            $("#clase2").change(function () {
+                var clase = this.value;
+                $("#raza2").prop('disabled', true);
+                $.ajax({
+                    url: "/raza/tipo/"+clase,
+                    type: "get",
+                    success: function (data) {
+                        $('#raza2').empty();
+                        var opciones = '<option value="">Seleccione una Raza</option>';
+                        $.each(data,function(index,value){
+                            console.log(index,value);
+                            opciones += '<option value="'+value.id+'">'+value.nombre+'</option>';
+                        });
+
+                        $('#raza2').append(opciones);
+                        $("#raza2").prop('disabled', false);
                     },
                     error: function (data) {
                         console.log(data)

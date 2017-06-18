@@ -56,6 +56,13 @@
                                 </button>
                             </div>
                         </div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="col-md-12 text-center">
+                                <a href="{{ url('/auth/google') }}" class="btn btn-github"><i class="fa fa-github"></i> Google</a>
+                                <a href="{{ url('/auth/facebook') }}" class="btn btn-facebook"><i class="fa fa-facebook"></i> Facebook</a>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>

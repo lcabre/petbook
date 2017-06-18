@@ -51,13 +51,16 @@
                             @endif
                         </div>
                         <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
-                            <div class="nombre">{{ $mascota->nombre }}</div>
+                            <a href="{{ route("wallMascota", $mascota->id) }}"> <div class="nombre">{{ $mascota->nombre }}</div></a>
                             <div class="">{{ ($mascota->sexo == "H")?"Macho":"Hembra" }}</div>
                             <div class="">{{ $mascota->edad." años" }}</div>
                             <div class=""><span>Clase: </span>{{ $mascota->getTipoMascota()->nombre }}</div>
                             <div class=""><span>Raza: </span>{{ $mascota->getRaza()->nombre }}</div>
                         </div>
+                        <div class="botones">
+                        <a href="{{ route("wallMascota",$mascota->id) }}"><button type="submit" class="btn btn-primary">Wall</button></a>
                         <a href="{{ route("view.editMascota",$mascota->id) }}"><button type="submit" class="btn btn-primary">Editar</button></a>
+                        </div>
                     </div>
                 @endforeach
             @else

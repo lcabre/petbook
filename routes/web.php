@@ -34,11 +34,19 @@ Route::post('/mascotas/uploadperfilimage', 'MascotaController@uploadPerfilImage'
 Route::post('/mascotas/post/newpost', 'postController@newPost')->name("newPost");
 Route::post('/mascotas/post/megusta', 'postController@meGusta')->name("meGusta");
 Route::post('/mascotas/seguir', 'MascotaController@seguir')->name("seguir");
+Route::post('/mascotas/cita', 'CitaController@cita')->name('cita');
+Route::post('/mascotas/aceptarcita', 'CitaController@aceptarCita')->name("aceptarCita");
+Route::post('/mascotas/citainformada', 'CitaController@citaInformada')->name("citaInformada");
+Route::post('/mascotas/setaptocita', 'CitaController@setAptoCita')->name("setAptoCita");
 Route::post('/mascotas/posts/comentar', 'ComentarioController@newComentario')->name("newComentario");
 
 
 Route::get('/raza/{id}', 'RazaController@getById')->name("getRazaById");
 Route::get('/raza/tipo/{idTipo}', 'RazaController@getByTipo')->name("getRazaByTipo");
+
+// OAuth Routes
+Route::get('auth/{provider}', 'Auth\AuthController@redirectToProvider');
+Route::get('auth/{provider}/callback', 'Auth\AuthController@handleProviderCallback');
 
 //Route::get('/newpost', 'PostController@newpost')->name('newpost');
 

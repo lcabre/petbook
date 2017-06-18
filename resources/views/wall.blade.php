@@ -106,32 +106,63 @@
 @section("anuncios")
     <div class="box rounded-border ">
         <h1>Anuncios</h1>
-        <div class="anuncio">
-            <div class="avatar">
-
-            </div>
-            <div class="content">
-                <div class="name">
-                    Bingo
-                </div>
-                <div class="tipo">
-                    Buscando cita
-                </div>
-            </div>
-        </div>
-        <div class="anuncio">
-            <div class="avatar">
-
-            </div>
-            <div class="content">
-                <div class="name">
-                    Pepe
-                </div>
-                <div class="tipo">
-                    Buscando cita
-                </div>
-            </div>
-        </div>
+        @foreach($mascotas as $mascota)
+            @if($citas = $mascota->getNotificaciones("citaconcretada"))
+                @foreach($citas as $cita)
+                    <form action="{{ route("citaInformada") }}" method="post">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="idcita" value="{{ $mascota->id }}">
+                        <input type="hidden" name="idcitada" value="{{ $cita->id }}">
+                        <div class="anuncio">
+                            <div class="avatar">
+                                @if( $cita->getFotoPerfil())
+                                    <img src="{{ $cita->getFotoPerfil()->getUrl() }}" alt="">
+                                @else
+                                    <img src="/img/defaul_perfil_img.jpg" alt="">
+                                @endif
+                            </div>
+                            <div class="content">
+                                <div class="name">
+                                    <a href="{{ route("wallMascota", $cita->id) }}"> {{ $cita->nombre }}</a>
+                                </div>
+                                <div class="tipo">
+                                    <span>Acepto tu cita!</span>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-xs">aceptar</button>
+                        </div>
+                    </form>
+                @endforeach
+            @elseif($citas = $mascota->getNotificaciones("nuevacita"))
+                @foreach($citas as $cita)
+                    <form action="{{ route("aceptarCita") }}" method="post">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="idcita" value="{{ $cita->id }}">
+                        <input type="hidden" name="idcitada" value="{{ $mascota->id }}">
+                        <div class="anuncio">
+                            <div class="avatar">
+                                @if( $cita->getFotoPerfil())
+                                    <img src="{{ $cita->getFotoPerfil()->getUrl() }}" alt="">
+                                @else
+                                    <img src="/img/defaul_perfil_img.jpg" alt="">
+                                @endif
+                            </div>
+                            <div class="content">
+                                <div class="name">
+                                    <a href="{{ route("wallMascota", $cita->id) }}"> {{ $cita->nombre }}</a>
+                                </div>
+                                <div class="tipo">
+                                    <span>Acepto tu cita!</span>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-xs">aceptar</button>
+                        </div>
+                    </form>
+                @endforeach
+            @else
+                <span>No posee anuncios</span>
+            @endif
+        @endforeach
     </div>
 @endsection
 
@@ -148,6 +179,7 @@
 
 <?php /** @var App\Usuario $mascota */ ?>
 @section("menumascotas")
+
     <div class="box rounded-border ">
         <h1>Mis Mascotas</h1>
         @if($mascotas->count())

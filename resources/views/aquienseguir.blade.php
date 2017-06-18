@@ -84,38 +84,99 @@
     </div>
 @endsection
 
-
 @section("anuncios")
     <div class="box rounded-border ">
+        <h1>Notificaciones</h1>
+        @if($citas = $mascota->getNotificaciones("citaconcretada"))
+            @foreach($citas as $cita)
+                <form action="{{ route("citaInformada") }}" method="post">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="idcita" value="{{ $mascota->id }}">
+                    <input type="hidden" name="idcitada" value="{{ $cita->id }}">
+                    <div class="anuncio">
+                        <div class="avatar">
+                            @if( $cita->getFotoPerfil())
+                                <img src="{{ $cita->getFotoPerfil()->getUrl() }}" alt="">
+                            @else
+                                <img src="/img/defaul_perfil_img.jpg" alt="">
+                            @endif
+                        </div>
+                        <div class="content">
+                            <div class="name">
+                                <a href="{{ route("view.wallseguido", $cita->id) }}"> {{ $cita->nombre }}</a>
+                            </div>
+                            <div class="tipo">
+                                <span>Acepto tu cita!</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-xs">Aceptar</button>
+                    </div>
+                </form>
+            @endforeach
+        @elseif($citas = $mascota->getNotificaciones("nuevacita"))
+            @foreach($citas as $cita)
+                <form action="{{ route("aceptarCita") }}" method="post">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="idcita" value="{{ $cita->id }}">
+                    <input type="hidden" name="idcitada" value="{{ $mascota->id }}">
+                    <div class="anuncio">
+                        <div class="avatar">
+                            @if( $cita->getFotoPerfil())
+                                <img src="{{ $cita->getFotoPerfil()->getUrl() }}" alt="">
+                            @else
+                                <img src="/img/defaul_perfil_img.jpg" alt="">
+                            @endif
+                        </div>
+                        <div class="content">
+                            <div class="name">
+                                <a href="{{ route("view.wallseguido", $cita->id) }}"> {{ $cita->nombre }}</a>
+                            </div>
+                            <div class="tipo">
+                                <span>Te ha citado!</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-xs">Aceptar</button>
+                    </div>
+                </form>
+            @endforeach
+        @else
+            <span>No posee anuncios</span>
+        @endif
+    </div>
+    <div class="box rounded-border ">
         <h1>Anuncios</h1>
-        <div class="anuncio">
-            <div class="avatar">
-
-            </div>
-            <div class="content">
-                <div class="name">
-                    Bingo
-                </div>
-                <div class="tipo">
-                    Buscando cita
-                </div>
-            </div>
-        </div>
-        <div class="anuncio">
-            <div class="avatar">
-
-            </div>
-            <div class="content">
-                <div class="name">
-                    Pepe
-                </div>
-                <div class="tipo">
-                    Buscando cita
-                </div>
-            </div>
-        </div>
+        @if($aptocitas = $mascota->getAptoCitas())
+            @foreach($aptocitas as $aptocita)
+                <form action="{{ route("cita") }}" method="post">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="idcita" value="{{ $mascota->id }}">
+                    <input type="hidden" name="idcitada" value="{{ $aptocita->mascota()->first()->id }}">
+                    <div class="anuncio">
+                        <div class="avatar">
+                            @if( $aptocita->mascota()->first()->getFotoPerfil())
+                                <img src="{{ $aptocita->mascota()->first()->getFotoPerfil()->getUrl() }}" alt="">
+                            @else
+                                <img src="/img/defaul_perfil_img.jpg" alt="">
+                            @endif
+                        </div>
+                        <div class="content">
+                            <div class="name">
+                                <a href="{{ route("view.wallseguido", $aptocita->mascota()->first()->id) }}"> {{ $aptocita->mascota()->first()->nombre }}</a>
+                            </div>
+                            <div class="tipo">
+                                <span>Busca Cita</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-xs">Citar</button>
+                    </div>
+                </form>
+            @endforeach
+        @else
+            <span>No posee anuncios</span>
+        @endif
     </div>
 @endsection
+
 @section("ranking")
     <div class="box rounded-border ">
         <div class="imgperfil">

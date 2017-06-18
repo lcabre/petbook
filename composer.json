@@ -9,6 +9,7 @@
         "barryvdh/laravel-ide-helper": "^2.3",
         "jenssegers/date": "^3.2",
         "laravel/framework": "5.4.*",
+        "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0"
     },
     "require-dev": {

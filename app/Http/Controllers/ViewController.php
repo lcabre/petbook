@@ -193,7 +193,7 @@ class ViewController extends Controller
         $mascotasParaSeguir = $miMascota->getNoSeguidos(3);
         array_push($variables, "mascotasParaSeguir");
 
-        //dd($listaAmigos);
+        //dd($mascota, $miMascota, $posts, $miPerfil, $mascotasParaSeguir);
         return view('wallseguido', compact($variables));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -55,6 +56,22 @@ class Mascota extends Model
     public function sigo()
     {
         return $this->belongsToMany('App\Mascota', 'sigue', 'id_mascota', 'id_mascota2')->withTimestamps();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function citas()
+    {
+        return $this->belongsToMany('App\Mascota', 'cita', 'id_mascota2', 'id_mascota')->withTimestamps();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function cito()
+    {
+        return $this->belongsToMany('App\Mascota', 'cita', 'id_mascota', 'id_mascota2')->withTimestamps();
     }
 
     /**
@@ -173,8 +190,7 @@ class Mascota extends Model
                     ->from('sigue')
                     ->where("id_mascota","=", $this->id);
             }
-        )
-            ->orderBy("updated_at", "desc");
+        )->orderBy("updated_at", "desc");
 
         return $result->get();
     }
@@ -184,5 +200,65 @@ class Mascota extends Model
      */
     public function seguir(Mascota $mascota){
         $this->sigo()->attach($mascota);
+    }
+
+    /**
+     * @param Mascota $mascota
+     */
+    public function citar(Mascota $mascota){
+        $this->cito()->attach($mascota);
+    }
+
+    public function aptoCita(){
+        $apto =  $this->aptoCitas()->where("concretado", 0)->first();
+        return $apto;
+    }
+
+    /**
+     * @param $tipo
+     * @return bool|Collection
+     */
+    public function getNotificaciones($tipo){
+        if($tipo=="nuevacita"){
+            $lista = $this->citas()->wherePivot("concretado", 0)->get();
+            if ($lista->isEmpty())
+                return false;
+            else
+                return $lista;
+        }
+        if($tipo=="citaconcretada"){
+            $lista = $this->cito()->wherePivot("concretado", 1)->wherePivot("informado",0)->get();
+            if ($lista->isEmpty())
+                return false;
+            else
+                return $lista;
+        }
+    }
+
+    public function getAptoCitas(){
+        $result = AptoCita::whereIn("id_mascota",
+            function ($query) {
+                $query->select(DB::raw("id_mascota2"))
+                    ->from('sigue')
+                    ->where("id_mascota","=", $this->id);
+            }
+        )
+        ->whereNotIn("id_mascota",
+            function ($query) {
+                $query->select(DB::raw("id_mascota2"))
+                    ->from('cita')
+                    ->where("id_mascota","=", $this->id)
+                    ->where("concretado", 0);
+            }
+        )
+        ->where("id_raza", $this->getRaza()->id)
+        ->where("concretado", 0)
+        ->orderBy("updated_at", "desc")
+        ->get();
+        //dd($result);
+        if ($result->isEmpty())
+            return false;
+        else
+            return $result;
     }
 }
