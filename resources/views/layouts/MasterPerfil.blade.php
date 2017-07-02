@@ -37,11 +37,11 @@
                     </div>
                 </div>
             @endif
-            <div class="notificaciones">
+        <!--<div class="notificaciones">
                 <i class="fa fa-bell" aria-hidden="true"></i>
                 <p>Notificaciones</p>
                 <span class="badge">12</span>
-            </div>
+            </div>-->
         </div>
     </header>
     <div class="container">

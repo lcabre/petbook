@@ -87,14 +87,21 @@
 
 @section("menu")
     <div class="box rounded-border ">
-        <h1>Menu</h1>
-        <div class="lista">
-            <ul>
-                <a href="#"><li><span><i class="fa fa-bell" aria-hidden="true"></i></span>Notificaciones<span class="badge">12</span></li></a>
-                <li class="active"><span><i class="fa fa-user" aria-hidden="true"></i></span>Mis Datos</li>
-                <a href="{{route("mascotas")}}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Mis Mascotas</li></a>
-            </ul>
-        </div>
+        <h1>Mis Mascotas</h1>
+        @if($mascotas->count())
+            <div class="lista">
+                <ul>
+                    @foreach($mascotas as $mascota)
+                        <a href="{{ route("wallMascota", $mascota->id) }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>{{ $mascota->nombre }}</li></a>
+                    @endforeach
+                    <a href="{{route("mascotas")}}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Administrar</li></a>
+                </ul>
+
+            </div>
+        @else
+            <div class="alert alert-warning">No posee mascotas</div>
+            Ingrese <a href="{{ route("agregarMascotas") }}">Aquí</a> para agregar una.
+        @endif
     </div>
 @endsection
 @section("javascript")

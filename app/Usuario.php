@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
+
 
 /**
  * @property integer $id
@@ -44,13 +46,14 @@ class Usuario extends Model
         return $this->belongsTo('App\User', 'id_user');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function adoptas()
+    public function adopciones()
     {
-        return $this->hasMany('App\Adopta', 'id_usuario_2');
+        return $this->belongsToMany('App\Mascota', 'adopcion', 'id_usuario', 'id_mascota')->withTimestamps();
     }
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -121,5 +124,47 @@ class Usuario extends Model
 
     public function hasThisMascotaId($id){
         return $this->mascotas()->find($id);
+    }
+
+    public function getAptoAdopcion(){
+        $result = aptoAdopcion::whereNotIn("id_mascota",
+            function ($query) {//no este entre los que les mande adopcion
+                $query->select(DB::raw("id_mascota"))
+                    ->from('adopcion')
+                    ->where("id_usuario","=", $this->id)
+                    ->where("concretado", 0);
+            }
+        )->whereNotIn("id_mascota",
+            function ($query) {//no sea mi mascota
+                $query->select(DB::raw("id"))
+                    ->from('mascota')
+                    ->where("id_usuario","=", $this->id);
+            }
+        )
+        ->where("concretado", 0)
+        ->orderBy("updated_at", "desc")
+        ->get();
+        //dd($result);
+        if ($result->isEmpty())
+            return false;
+        else
+            return $result;
+    }
+
+    public function getNotificaciones($tipo){
+        if($tipo=="nuevaadopcion"){
+            $lista = $this->adopciones()->wherePivot("concretado", 0)->get();
+            if ($lista->isEmpty())
+                return false;
+            else
+                return $lista;
+        }
+        if($tipo=="adopcionconcretada"){
+            $lista = $this->adopciones()->wherePivot("concretado", 1)->wherePivot("informado",0)->get();
+            if ($lista->isEmpty())
+                return false;
+            else
+                return $lista;
+        }
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\AptoAdopcion;
 use App\FotoPerfil;
 use App\Mascota;
 use App\Raza;
@@ -75,8 +76,9 @@ class MascotaController extends Controller
         $mascota->sexo = $request->sexo;
         $mascota->edad = $request->edad;
         $mascota->otras_caracteristicas = $request->otras_caracteristicas;
-        $mascota->apto_adopcion = ($request->apto_adopcion == "si")?1:0;
         $mascota->save();
+
+        $this->setAptoAdopcion($request);
 
         if($request->raza != $mascota->getRaza()->id){
             $raza = Raza::find($request->raza);
@@ -84,6 +86,26 @@ class MascotaController extends Controller
         }
 
         return redirect()->back()->with('message', 'Los cambios se guardaron con exito.');
+    }
+
+    /**
+     * @param Request $request
+     */
+    private function setAptoAdopcion(Request $request)
+    {
+        $apto = AptoAdopcion::where("id_mascota", $request->id)->where("concretado", 0)->first();
+        //dd(var_dump($apto), $request->apto_cita);
+        if($request->apto_adopcion == "si"){
+            if(!$apto){
+                $AptoAdopcion = new AptoAdopcion();
+                $AptoAdopcion->id_mascota = $request->id;
+                $AptoAdopcion->save();
+            }
+        }else{
+            if($apto){
+                $apto->delete();
+            }
+        }
     }
 
     /**

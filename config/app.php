@@ -168,6 +168,8 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Jenssegers\Date\DateServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
+        Milon\Barcode\BarcodeServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -233,6 +235,9 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Date' => Jenssegers\Date\Date::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

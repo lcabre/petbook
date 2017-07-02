@@ -14,6 +14,7 @@
     <link href="{{ asset('css/bootstrap-datepicker.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/bootstrap-select.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/jasny-bootstrap.min.css') }}">
+    <script src="{{ asset("js/chart.min.js") }}"></script>
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
@@ -37,11 +38,11 @@
                     </div>
                 </div>
             @endif
-            <div class="notificaciones">
+            <!--<div class="notificaciones">
                 <i class="fa fa-bell" aria-hidden="true"></i>
                 <p>Notificaciones</p>
                 <span class="badge">12</span>
-            </div>
+            </div>-->
         </div>
     </header>
     <div class="container">
@@ -53,9 +54,9 @@
             @yield("content")
         </section>
         <aside class="col-lg-3 col-md-3 col-sm-3 col-xs-12 padding-l">
+            @yield("ranking")
             @yield("seguir")
             @yield("anuncios")
-            @yield("ranking")
         </aside>
     </div>
     <script src="{{ asset('js/app.js') }}"></script>

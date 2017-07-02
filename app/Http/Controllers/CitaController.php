@@ -44,8 +44,7 @@ class CitaController extends Controller
             }
         }else{
             if($apto){
-                $apto->concretado = 1;
-                $apto->save();
+                $apto->delete();
             }
         }
         return redirect()->back();

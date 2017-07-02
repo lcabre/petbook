@@ -17,6 +17,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/wall', 'ViewController@indexWall')->name('wall');
 Route::get('/wall/mascota/{id}', 'ViewController@wallMascota')->name("wallMascota");
+Route::get('/wall/mascota/qr/{id}', 'QrController@qrMascota')->name("qrMascota");
 Route::get('/wall/seguido/{id}', 'ViewController@wallSeguido')->name('view.wallseguido');
 Route::get('/perfil', 'ViewController@indexPerfil')->name('perfil');
 Route::get('/seguidos/{id}', 'ViewController@seguidos')->name('view.seguidos');
@@ -39,7 +40,11 @@ Route::post('/mascotas/aceptarcita', 'CitaController@aceptarCita')->name("acepta
 Route::post('/mascotas/citainformada', 'CitaController@citaInformada')->name("citaInformada");
 Route::post('/mascotas/setaptocita', 'CitaController@setAptoCita')->name("setAptoCita");
 Route::post('/mascotas/posts/comentar', 'ComentarioController@newComentario')->name("newComentario");
-
+Route::post('/mascotas/pediradopcion', 'UsuarioController@pedirAdopcion')->name('pedirAdopcion');
+Route::post('/mascotas/aceptaradopcion', 'UsuarioController@aceptarAdopcion')->name("aceptarAdopcion");
+Route::post('/mascotas/adopcioninformada', 'UsuarioController@adopcionInformada')->name("adopcionInformada");
+Route::post('/mascotas/chart', 'ChartController@datosChart')->name("datosChart");
+Route::post('/mascota/qr/descarga', 'QrController@descargar')->name("descargaQR");
 
 Route::get('/raza/{id}', 'RazaController@getById')->name("getRazaById");
 Route::get('/raza/tipo/{idTipo}', 'RazaController@getByTipo')->name("getRazaByTipo");

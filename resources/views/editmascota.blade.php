@@ -48,10 +48,11 @@
         <h1>Menu</h1>
         <div class="lista">
             <ul>
-                <a href="#"><li><span><i class="fa fa-bell" aria-hidden="true"></i></span>Notificaciones<span class="badge">12</span></li></a>
+                <a href="{{ route("home") }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Mi Dueño</li></a>
                 <a href="{{route("wallMascota", $mascota->id)}}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Wall</li></a>
-                <li class="active"><span><i class="fa fa-user" aria-hidden="true"></i></span>Mis Datos</li>
-                <a href="{{route("mascotas")}}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Mis Mascotas</li></a>
+                <a href="{{ route("mascotas") }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Mascotas</li></a>
+                <li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Editar información</li>
+                <a href="{{ route("view.seguidos", $mascota->id) }}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Seguidos</li></a>
             </ul>
         </div>
     </div>
@@ -59,6 +60,21 @@
 
 <?php /** @var App\Usuario $mascota */ ?>
 @section("content")
+    <div class="generalbox rounded-border">
+        <h1>Codigo QR</h1>
+        <div class="content mascotas">
+            <p class="text-left">Graba este codigo en el collar de tu mascota, si se pierde y alguien la encuentra podra contactarse condtigo</p>
+            <div class="qr">
+                {!! $qr !!}
+                <form action="{{ route("descargaQR") }}" method="post">
+                    <input type="hidden" name="id" value="{{ $mascota->id }}">
+                    {{ csrf_field() }}
+                    <button type="submit" class="btn btn-default" id="descargaqr">Descargar QR</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
     <div class="generalbox rounded-border ">
         <h1>
             Datos de Mascota
@@ -108,12 +124,12 @@
                     <label>Apto Adopcion</label>
                     <div class="radio">
                         <label class="control-label">
-                            <input type="radio" name="apto_adopcion" value="si" {{ old("apto_adopcion") == "si" ? "checked":($mascota->apto_adopcion == 1?"checked":"") }}>Si
+                            <input type="radio" name="apto_adopcion" value="si" {{ old("apto_adopcion") == "si" ? "checked":($mascota->esAptoAdopcion()?"checked":"") }}>Si
                         </label>
                     </div>
                     <div class="radio">
                         <label class="control-label">
-                            <input type="radio" name="apto_adopcion" value="no" {{ old("apto_adopcion") == "no" ? "checked":($mascota->apto_adopcion == 0?"checked":"") }}>No
+                            <input type="radio" name="apto_adopcion" value="no" {{ old("apto_adopcion") == "no" ? "checked":(!$mascota->esAptoAdopcion()?"checked":"") }}>No
                         </label>
                     </div>
                 </div>
@@ -222,67 +238,12 @@
                         </label>
                     </div>
                 </div>
-                <button class="btn  btn-default" id="saveimage">Guardar</button>
+                <button class="btn  btn-default" id="">Guardar</button>
             </form>
         </div>
     </div>
 @endsection
 
-@section("anuncios")
-    <div class="box rounded-border ">
-        <h1>Anuncios</h1>
-        <div class="anuncio">
-            <div class="avatar">
-
-            </div>
-            <div class="content">
-                <div class="name">
-                    Bingo
-                </div>
-                <div class="tipo">
-                    Buscando cita
-                </div>
-            </div>
-        </div>
-        <div class="anuncio">
-            <div class="avatar">
-
-            </div>
-            <div class="content">
-                <div class="name">
-                    Pepe
-                </div>
-                <div class="tipo">
-                    Buscando cita
-                </div>
-            </div>
-        </div>
-    </div>
-@endsection
-
-@section("ranking")
-    <div class="box rounded-border ">
-        <div class="imgperfil">
-
-        </div>
-
-
-        qweqwe
-    </div>
-@endsection
-
-@section("menu")
-    <div class="box rounded-border ">
-        <h1>Menu</h1>
-        <div class="lista">
-            <ul>
-                <a href="#"><li><span><i class="fa fa-bell" aria-hidden="true"></i></span>Notificaciones<span class="badge">12</span></li></a>
-                <li class="active"><span><i class="fa fa-user" aria-hidden="true"></i></span>Mis Datos</li>
-                <a href="{{route("mascotas")}}"><li><span><i class="fa fa-paw" aria-hidden="true"></i></span>Mis Mascotas</li></a>
-            </ul>
-        </div>
-    </div>
-@endsection
 @section("javascript")
     <script>
         $(document).ready(function(){

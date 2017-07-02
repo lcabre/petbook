@@ -115,11 +115,27 @@ class Mascota extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function adopciones()
+    {
+        return $this->belongsToMany('App\Usuario', 'adopcion', 'id_mascota', 'id_usuario')->withTimestamps();
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function aptoCitas()
     {
         return $this->hasMany('App\AptoCita', 'id_mascota');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function aptoAdopcion()
+    {
+        return $this->hasMany('App\AptoAdopcion', 'id_mascota');
     }
 
     /**
@@ -214,6 +230,11 @@ class Mascota extends Model
         return $apto;
     }
 
+    public function esAptoAdopcion(){
+        $apto =  $this->aptoAdopcion()->where("concretado", 0)->first();
+        return $apto;
+    }
+
     /**
      * @param $tipo
      * @return bool|Collection
@@ -233,18 +254,32 @@ class Mascota extends Model
             else
                 return $lista;
         }
+        if($tipo=="nuevaadopcion"){
+            $lista = $this->adopciones()->wherePivot("concretado", 0)->get();
+            if ($lista->isEmpty())
+                return false;
+            else
+                return $lista;
+        }
+        if($tipo=="adopcionconcretada"){
+            $lista = $this->adopciones()->wherePivot("concretado", 1)->wherePivot("informado",0)->get();
+            if ($lista->isEmpty())
+                return false;
+            else
+                return $lista;
+        }
     }
 
     public function getAptoCitas(){
         $result = AptoCita::whereIn("id_mascota",
-            function ($query) {
+            function ($query) {//entre los que sigo
                 $query->select(DB::raw("id_mascota2"))
                     ->from('sigue')
                     ->where("id_mascota","=", $this->id);
             }
         )
         ->whereNotIn("id_mascota",
-            function ($query) {
+            function ($query) {//no este entre los que cite y no concrete
                 $query->select(DB::raw("id_mascota2"))
                     ->from('cita')
                     ->where("id_mascota","=", $this->id)

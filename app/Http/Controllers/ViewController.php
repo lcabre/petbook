@@ -7,8 +7,11 @@ use App\Raza;
 use App\TipoMascota;
 use App\Post;
 use Auth;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Milon\Barcode\DNS2D;
 
 class ViewController extends Controller
 {
@@ -26,7 +29,7 @@ class ViewController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function indexWall(){
+    public function indexWall(Request $request){
         $user = Auth::user();
         $variables = array();
 
@@ -38,6 +41,9 @@ class ViewController extends Controller
 
         if($fotoPerfil = $perfil->getFotoPerfil())
             array_push($variables, "fotoPerfil");
+
+        if($mascotas->count())
+            $request->session()->put('idMascotaActiva', $perfil->mascotas()->first()->id);
 
         $postDeMascotas = $perfil->getMascotasPosts();
         array_push($variables, "postDeMascotas");
@@ -118,8 +124,13 @@ class ViewController extends Controller
         $mascota = Mascota::find($id);
         array_push($variables, "mascota");
 
+        $qr = DNS2D::getBarcodeSVG(route("qrMascota", $mascota->id), "QRCODE", 9,9);
+
+        array_push($variables, "qr");
+
         $tipos = TipoMascota::all();
         array_push($variables, "tipos");
+
         $razas = Raza::where("id_tipo_mascota",$mascota->getTipoMascota()->id)->get();
         array_push($variables, "razas");
 
